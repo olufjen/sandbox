@@ -12,6 +12,8 @@ import no.games.minimax.BasicMinimax;
  * The number can’t go down below 0
  * A player that can’t make a move loses
  * For player 1  to win, then the game must reach the winning position in an odd number of moves
+ * How to make this minimax work?
+ * 
  *
  */
 public class ReduceNumberMinimax extends BasicMinimax<ReduceNumberMove> {
