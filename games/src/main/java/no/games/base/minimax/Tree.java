@@ -1,4 +1,4 @@
-package no.games.samples;
+package no.games.base.minimax;
 
 public class Tree {
     private Node root;
@@ -13,4 +13,8 @@ public class Tree {
     void setRoot(Node root) {
         this.root = root;
     }
+    public String toString() {
+         return root.toString();
+    }
+
 }
