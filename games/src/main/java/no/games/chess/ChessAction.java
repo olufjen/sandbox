@@ -14,14 +14,17 @@ import java.util.List;
  * This interface represent the ChessAction in a game of chess
  *
  * @param <P> Contains the positions of the game and whether they are occupied or not
- * @param <A>
+ * @param <A> Contains available positions
+ * @param <PR> Contains positions removed
+ * @param <GamePiece> Represent a ChessPiece
+ * @param <PP> Represent the preferred position
  */
-public interface ChessAction<P, A, PR, CP,PP> {
+public interface ChessAction<P, A, PR, GamePiece,PP> {
 	
 	public P getPositions();
 	public A getAvailablePositions();
 	public PR getPositionRemoved();
-	public CP getChessPiece();
+	public GamePiece getChessPiece();
 	public PP getPreferredPosition();
-
+	public void setPreferredPosition(PP p);
 }

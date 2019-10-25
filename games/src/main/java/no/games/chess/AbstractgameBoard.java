@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  * @param <P> P represents a Position class
  *
  */
-public abstract class AbstractgameBoard<P> {
+public abstract class AbstractgameBoard<P> implements GameBoard{
 
 	protected HashMap<String,P> positions;
 	protected List<P> usedPositionlist;

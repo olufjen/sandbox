@@ -15,7 +15,7 @@ import aima.core.util.datastructure.XYLocation;
  *  A description of what a particular action does is a transition model (p. 67 AIMA)
  *  It is also a successor state from the current state after performing action a.
  */
-public abstract class AbstractChessGame implements Game<ChessState,ChessAction,ChessPlayer>{
+public abstract class AbstractChessGame implements ChessGame<ChessState<GameBoard>, ChessAction, ChessPlayer<GamePiece, PieceMove>>{
 
 
 	/**
@@ -26,16 +26,17 @@ public abstract class AbstractChessGame implements Game<ChessState,ChessAction,C
 	protected int[][] squares;
 	protected String[][] piecePosition;
 	protected String movedPiece = null; //Name of piece that has been moved
-	protected ChessState chessState;
-	protected ChessAction chessAction;
-	protected ChessPlayer whitePlayer;
-	protected ChessPlayer blackPlayer;
+	protected ChessState<GameBoard> chessState; 
+	protected ChessAction<?, ?, ?,  GamePiece<?>, ?> chessAction;
+	protected ChessPlayer<GamePiece<?>, PieceMove<?,?>> whitePlayer;
+	protected ChessPlayer<GamePiece<?>, PieceMove<?,?>> blackPlayer;
 	
 	/**
-	 * Creates a board with <code>size</code> rows and size columns. Column and
+	 * Creates a aima chessboard with <code>size</code> rows and size columns. Column and
 	 * row indices start with 0.
 	 */
 	public AbstractChessGame(int size) {
+	
 		squares = new int[size][size];
 		piecePosition = new String[size][size];
 		for (int i = 0; i < size; i++) {
@@ -48,13 +49,62 @@ public abstract class AbstractChessGame implements Game<ChessState,ChessAction,C
 				piecePosition[i][j] = null;
 			}
 		}
+	
 	}
 
 
+	public String getMovedPiece() {
+		return movedPiece;
+	}
+
+
+	public void setMovedPiece(String movedPiece) {
+		this.movedPiece = movedPiece;
+	}
+
+
+	public ChessAction getChessAction() {
+		return chessAction;
+	}
+
+
+	public void setChessAction(ChessAction chessAction) {
+		this.chessAction = chessAction;
+	}
+
+
+	public ChessPlayer<GamePiece<?>, PieceMove<?, ?>> getWhitePlayer() {
+		return whitePlayer;
+	}
+
+
+	public void setWhitePlayer(ChessPlayer<GamePiece<?>, PieceMove<?,?>> whitePlayer) {
+		this.whitePlayer = whitePlayer;
+	}
+
+
+	public ChessPlayer<GamePiece<?>, PieceMove<?, ?>> getBlackPlayer() {
+		return blackPlayer;
+	}
+
+
+	public void setBlackPlayer(ChessPlayer<GamePiece<?>, PieceMove<?,?>> blackPlayer) {
+		this.blackPlayer = blackPlayer;
+	}
+
+
+	/**
+	 * The following methods are used to create and manipulate the aima chessboard.
+	 * @return
+	 */
 	public int getSize() {
 		return squares.length;
 	}
 
+	/**
+	 * clear
+	 * This method clears the aima chessboard
+	 */
 	public void clear() {
 		for (int i = 0; i < getSize(); i++) {
 			for (int j = 0; j < getSize(); j++) {
@@ -313,14 +363,17 @@ public abstract class AbstractChessGame implements Game<ChessState,ChessAction,C
 		return builder.toString();
 	}
 
-	@Override
-	public abstract ChessState getInitialState();
 
-	@Override
-	public abstract ChessPlayer[] getPlayers();
+	public abstract ChessState<GameBoard> getInitialState();
 
-	@Override
-	public abstract ChessPlayer getPlayer(ChessState state);
+
+	public abstract ChessPlayer<GamePiece, PieceMove>[] getPlayers();
+
+
+	public abstract ChessPlayer<GamePiece, PieceMove> getPlayer(ChessState<GameBoard> state);
+
+	
+	public abstract List<ChessAction> getActions(ChessState<GameBoard> state);
 
 	/**
 	 * getResult
@@ -330,15 +383,16 @@ public abstract class AbstractChessGame implements Game<ChessState,ChessAction,C
 	 * @param action The action chosen by the search algorithm
 	 * @return
 	 */
-	@Override
-	public abstract ChessState getResult(ChessState state, ChessAction action);
+	public abstract ChessState<GameBoard> getResult(ChessState<GameBoard> chessState, ChessAction<?, ?, ?, GamePiece<?>, ?> action);	
+	
 
-	@Override
-	public abstract boolean isTerminal(ChessState state);
+	
+	public abstract boolean isTerminal(ChessState<GameBoard> state);
 
-	@Override
-	public abstract double getUtility(ChessState state, ChessPlayer player);
 
-	@Override
-	public abstract List<ChessAction> getActions(ChessState state);
+	public abstract double getUtility(ChessState<?> state, ChessPlayer<GamePiece, PieceMove> player);
+
+
+	
+	public abstract double analyzePieceandPosition(ChessAction<?, ?, ?,GamePiece<?>, ?> action); 
 }

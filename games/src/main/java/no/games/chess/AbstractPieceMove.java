@@ -12,6 +12,7 @@ package no.games.chess;
 public abstract class AbstractPieceMove<F,T> implements PieceMove<F, T> {
 	protected int moveNumber;
 	protected String moveNotation; // Contains the algebraic notation of the move
+	
 	public int getMoveNumber() {
 		return moveNumber;
 	}

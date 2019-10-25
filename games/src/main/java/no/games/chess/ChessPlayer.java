@@ -8,27 +8,27 @@ import no.games.chess.AbstractPlayer.player;
 /**
  * @author oluf
  * This interface represent a chessPlayer in a game of chess
- * @param <P> Contains the ChessPieces owned by the player
- * @param <M> Represent a Move made by a Piece
+ * @param <GamePiece> Contains the ChessPieces owned by the player
+ * @param <PieceMove> Represent a Move made by a Piece
  */
-public interface ChessPlayer<P, M> {
+public interface ChessPlayer<GamePiece, PieceMove> {
 
-	public HashMap<String,P> getPieces();
-	public HashMap<String,P> getMyPieces();
+	public HashMap<String,GamePiece> getPieces();
+	public HashMap<String,GamePiece> getMyPieces();
 
-	public void setMyPieces(HashMap<String, P> myPieces);
+	public void setMyPieces(HashMap<String, GamePiece> myPieces);
 
-	public HashMap<String, M> getMyMoves();
+	public HashMap<String, PieceMove> getMyMoves();
 
-	public void setMyMoves(HashMap<String,M> myMoves);
+	public void setMyMoves(HashMap<String,PieceMove> myMoves);
 
-	public M getCurrentMove();
+	public PieceMove getCurrentMove();
 
-	public void setCurrentMove(M currentMove);
+	public void setCurrentMove(PieceMove currentMove);
 
-	public ArrayList<P> getMygamePieces();
+	public ArrayList<GamePiece> getMygamePieces();
 
-	public void setMygamePieces(ArrayList<P> mygamePieces);
+	public void setMygamePieces(ArrayList<GamePiece> mygamePieces);
 
 	public player getPlayerName();
 

@@ -2,13 +2,13 @@ package no.games.chess;
 
 /**
  * AbstractPlayer represent a general Chess player
- * 
+ * The AbstractPlayer has an enumeration that indicate if the player is black or white
  * @author oluf
  *
- * @param <P>
- * @param <M>
+ * @param <GamePiece>
+ * @param <PieceMove>
  */
-public abstract class AbstractPlayer<P, M> implements ChessPlayer<P,M> {
+public abstract class AbstractPlayer<GamePiece, PieceMove> implements ChessPlayer<GamePiece, PieceMove> {
 
 	protected static enum player {
 		WHITE,
