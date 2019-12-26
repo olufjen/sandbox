@@ -25,6 +25,7 @@ public abstract class AbstractGamePiece<P> implements GamePiece<P> {
 		WHITE
 	}
 	protected int value;
+	protected int orgValue = -1;
 	
 	public abstract P getmyPosition();
 	public abstract void getLegalmoves(P position);
@@ -43,6 +44,9 @@ public abstract class AbstractGamePiece<P> implements GamePiece<P> {
 	}
 	public void setValue(int value) {
 		this.value = value;
+		if (orgValue == -1) {
+			orgValue = value;
+		}
 	}
 	
 	

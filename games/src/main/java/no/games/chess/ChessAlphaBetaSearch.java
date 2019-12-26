@@ -1,6 +1,9 @@
 package no.games.chess;
 
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,7 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
 	private ChessAction<?, ?, ?, GamePiece, ?> action;
 	private String outputFileName = "C:\\Users\\bruker\\Google Drive\\privat\\ontologies\\analysis\\logs.txt";
 	private PrintWriter writer = null;
+	private FileWriter fw = null;
 	
 	 private Timer timer;
 	public ChessAlphaBetaSearch(Game<ChessState<GameBoard>, ChessAction<?, ?, ?, GamePiece<?>, ?>, ChessPlayer<GamePiece, PieceMove>> game, double utilMin, double utilMax,
@@ -40,13 +44,22 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
 	
 		super(game, utilMin, utilMax, time);
 	      this.timer = new Timer(time);
-	      try 
+			try {
+				fw = new FileWriter(outputFileName, true);
+			} catch (IOException e1) {
+
+				e1.printStackTrace();
+			}
+		      writer = new PrintWriter(new BufferedWriter(fw));		
+	      
+	      
+/*	      try 
 	      {
 	         writer = new PrintWriter(outputFileName);
 	      } catch (FileNotFoundException e) {
 	         System.err.println("'" + outputFileName 
 	            + "' is an invalid output file.");
-	      }	
+	      }	*/
 	}
 
 	
