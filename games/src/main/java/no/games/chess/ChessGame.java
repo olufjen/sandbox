@@ -25,5 +25,6 @@ public interface ChessGame<ChessState, ChessAction, ChessPlayer> extends Game<Ch
 	public List<ChessAction> getActions(ChessState state);
 	public abstract ChessState getResult(ChessState chessState, ChessAction action);
 	public double analyzePieceandPosition(ChessAction action);
+	public double analyzeState(ChessState state);
   
 }

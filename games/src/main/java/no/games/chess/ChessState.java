@@ -17,7 +17,8 @@ public interface ChessState<GameBoard> {
 	public ChessPlayer getPlayerTomove();
 	public void returnMyplayer();
 	public void emptyMovements();
-
+	public void clearMovements(GamePiece piece);
+	public void setAction(ChessAction action);
 	public double getUtility();
 
 	public void setUtility(double utility);

@@ -18,7 +18,7 @@ import no.games.chess.ChessState;
 import no.games.chess.ChessPlayer;
 /**
  * ChessAlphaBetaSearch is a subclass of IterativeDeepeningAlphaBetaSearch
- * and performs an iterative deepening Minimax search with alpha-beta pruning and
+ * and performs, through its makeDecision method, an iterative deepening Minimax search with alpha-beta pruning and
  * action ordering of Chess states and Chess actions. Maximal computation time is specified in seconds.
  * This object is created and called for every new call to the proposemove method of PlayGame
  * 
@@ -37,12 +37,14 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
 	private String outputFileName = "C:\\Users\\bruker\\Google Drive\\privat\\ontologies\\analysis\\logs.txt";
 	private PrintWriter writer = null;
 	private FileWriter fw = null;
+	private int timecount = 0;
 	
 	 private Timer timer;
 	public ChessAlphaBetaSearch(Game<ChessState<GameBoard>, ChessAction<?, ?, ?, GamePiece<?>, ?>, ChessPlayer<GamePiece, PieceMove>> game, double utilMin, double utilMax,
 			int time) {
 	
 		super(game, utilMin, utilMax, time);
+		this.timecount = time;
 	      this.timer = new Timer(time);
 			try {
 				fw = new FileWriter(outputFileName, true);
@@ -84,6 +86,7 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
     	
         metrics = new Metrics();
         StringBuffer logText = null;
+        StringBuffer store = new StringBuffer("Ordered actions");
         ChessPlayer player =  (ChessPlayer) game.getPlayer(mystate);
         ChessGame chessGame = (ChessGame) game;
         List<ChessAction> actions = chessGame.getActions(mystate);
@@ -93,35 +96,50 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
         do {
             incrementDepthLimit();
             if (logEnabled)
-                logText = new StringBuffer("depth " + currDepthLimit + ": \n");
+                logText = new StringBuffer("New while with depth " + currDepthLimit + ": \n");
             heuristicEvaluationUsed = false;
             ActionStore<ChessAction> newResults = new ActionStore<>();
-            for (ChessAction action : results) {
+            for (ChessAction action : results) { // Do a minimax search on ordered actions
                 double value = minValue(game.getResult(state, action), player, Double.NEGATIVE_INFINITY,
                         Double.POSITIVE_INFINITY, 1);
 /*                if (timer.timeOutOccurred())
                     break; // exit from action loop
 */                newResults.add(action, value);
                 if (logEnabled)
-                    logText.append(action).append("-> ").append(value).append(" Metrics ").append(metrics).append("\n").append("From action store:\n");
+                    logText.append(action).append("\n -> ").append(value).append(" Metrics ").append(metrics).append("\n").append("From action store:\n");
             }
             if (logEnabled) {
             	 if (newResults.size() > 0) {
             		 logText.append(newResults.actions.get(0)).append(" Utilvalue ").append(newResults.utilValues.get(0)).append("\n");
             	 }
             }
-           writer.println(logText);
+            logText.append("new depth " + currDepthLimit + ": \n");
+
+//           System.out.println(newResults.toString());
+//            writer.println(newResults.toString());
             if (newResults.size() > 0) {
                 results = newResults.actions;
+                logText.append("Checking ordered actions \n");
+/*
+ * Use this structure to ensure that the makeDecision method always return actions belonging to the active player, not the opponent  
+ * The minimax search has run through all actions.  See above!            
+ */
 //                if (!timer.timeOutOccurred()) {
-                   if (hasSafeWinner(newResults.utilValues.get(0)))
+                   if (hasSafeWinner(newResults.utilValues.get(0))) {
+                	   logText.append(" Has a safe winner "+newResults.actions.get(0).toString()+"\n");
                        break; // exit from iterative deepening loop
-                   else if (newResults.size() > 1
-                           && isSignificantlyBetter(newResults.utilValues.get(0), newResults.utilValues.get(1)))
+                   }else if (newResults.size() > 1
+                           && isSignificantlyBetter(newResults.utilValues.get(0), newResults.utilValues.get(1))) {
+                	   logText.append(" Is better " +newResults.actions.get(0).toString()+"\n");
                        break; // exit from iterative deepening loop
+                   }
 //                }
             }
+            store.append(newResults.toString());
+ //           writer.println(logText);
         } while (!timer.timeOutOccurred() && heuristicEvaluationUsed);
+        writer.println(logText);
+        writer.println(store);
         writer.close();
         return results.get(0);
     }
@@ -133,7 +151,8 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
      * The type A for action is casted to ChessAction interface
      * @author Oluf
      */
-    public List<ChessAction> orderActions(ChessState state, List<ChessAction> list, ChessPlayer player, int depth) {
+    
+	public List<ChessAction> orderActions(ChessState state,  List<ChessAction> list, ChessPlayer player, int depth) {
     	ActionStore<ChessAction> newResults = new ActionStore<>();
         ChessGame chessGame = (ChessGame) game;
 //        System.out.println("From orderAction\n");
@@ -141,7 +160,7 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
     		double rank = chessGame.analyzePieceandPosition(action);
     		newResults.add(action, rank);
     	}
-  
+//    	System.out.println(newResults.toString());
         return  newResults.actions;
     }
     public double maxValue(ChessState state, ChessPlayer player, double alpha, double beta, int depth) {
@@ -186,11 +205,14 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
     }
 
     /**
-     * When overriding, first call the super implementation!
+     * When overriding, first call the super implementation???!
      * This overided version of eval must produce:
      * - When the state is not terminal:
      * A utility value that is max for a central position on the board + the value (rank) 
      * of the piece
+     * @since January 2020
+     * This method attempts to analyze the various features of the current state
+     * This method can only be used for active player, not the opponent player
      * 
     
      */
@@ -199,16 +221,22 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
         if (game.isTerminal(state)) {
             return game.getUtility(state, player);
         } else {
-          heuristicEvaluationUsed = true;
-     
- //         List<ChessAction> chessActions = chessState.getActions();
- //         ChessAction action = chessState.getAction();
+//          heuristicEvaluationUsed = true; Set in comment olj 10.08.20
+        ChessGame chessGame = (ChessGame) game;
+        double returnValue = chessGame.analyzeState(state);
+        if (returnValue == 0) {
+        	 heuristicEvaluationUsed = true; // indicates opponent to move
+        }
+        return chessGame.analyzeState(state);
+          
+/*          List<ChessAction> chessActions = chessState.getActions();
+          ChessAction action = chessState.getAction();
           ChessGame chessGame = (ChessGame) game;
           if (action != null)
         	  return chessGame.analyzePieceandPosition(action);
           else
         	  return 0;
-
+*/
         }
     }
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -249,6 +277,14 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
         int size() {
             return actions.size();
         }
+        public String toString() {
+        	 StringBuffer logText = new StringBuffer("Ordered actions: \n");
+        	 for (A action:actions) {
+        		 ChessAction localAction = (ChessAction) action;
+        		 logText.append(localAction.toString()+"\n");
+        	 }
+        	return logText.toString();
+        }
     }
     /**
      * Primitive operation which is called at the beginning of one depth limited
@@ -262,19 +298,28 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
     /**
      * Primitive operation which is used to stop iterative deepening search in
      * situations where a clear best action exists. This implementation returns
-     * always false.
+     * false if both utilities are 0.
+     * Otherwise it returns true. This makes sure that the returned action belongs to the gameplayer and not the opponent
      */
     protected boolean isSignificantlyBetter(double newUtility, double utility) {
-        return false;
+    	if (newUtility == utility && newUtility == 0)
+    		return false;
+        return newUtility >= utility;
     }
 
     /**
      * Primitive operation which is used to stop iterative deepening search in
      * situations where a safe winner has been identified. This implementation
      * returns true if the given value (for the currently preferred action
-     * result) is the highest or lowest utility value possible.
+     * result is the highest or lowest utility value possible.
+     * @since 05.05.20
+     * The resultutlity is divided by 100 since utilMax  is 1 and utilmin is 0.
      */
     protected boolean hasSafeWinner(double resultUtility) {
-        return resultUtility <= utilMin || resultUtility >= utilMax;
+    	if (resultUtility == 0)
+    		return false;
+    	double localUtil = resultUtility/100;
+    	return localUtil <= utilMin || localUtil >= utilMax;
+//        return resultUtility <= utilMin || resultUtility >= utilMax;
     }
 }

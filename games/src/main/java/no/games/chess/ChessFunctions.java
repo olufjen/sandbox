@@ -21,14 +21,46 @@ public class ChessFunctions {
 			return (P) p;
 		return null;
 	}
+	
+	/**
+	 * filterMove
+	 * A filter method to be used to return:
+	 * 1. What pieces protect a given position?
+	 * 2. What pieces attack a given position
+	 * @param l - a list of pieces?
+	 * @param p - a given position?
+	 * @param pr - the predicate
+	 * @return
+	 */
 	public static <T,P> List<T> filterMove(List<T> l, P p,Predicate<P>pr){
-		List result = new ArrayList<>();
-		if (pr.test(p)) {
-			
+		List<T> result = new ArrayList<>();
+		for (T e: l) {
+			if (pr.test(p)) {
+				result.add(e);
+			}
 		}
-		return null;
+	
+		return result;
 	}
-
+	/**
+	 * filterPiece
+	 * A filter method to be used to return:
+	 * 1. What pieces protect a given position?
+	 * 2. What pieces attack a given position
+	 * @param l - a list of pieces?
+	 * @param pr - the predicate
+	 * @return
+	 */
+	public static <T> List<T> filterPiece(List<T> list,Predicate<T>pr){
+		List<T> result = new ArrayList<>();
+		for (T e: list) {	
+			if (pr.test(e)) {
+				result.add(e);
+			}
+		}
+	
+		return result;
+	}
 	/**
 	 * processChessgame
 	 * This is a chess game processor
@@ -63,13 +95,17 @@ public class ChessFunctions {
 	/**
 	 * moveRule
 	 * This is a moveRuler. Based on chess piece type it calculates a list of available
-	 * XYLocations
+	 * Positions
 	 * @param t The chess piece
 	 * @param r The functional interface
-	 * @return a List<XYLocation>
+	 * @return a List<P> of positions.
 	 */
+	
 	public static <T,L> List<XYLocation> moveRule(T t,MoveRule<T,L> r) {
 		return (List<XYLocation>) r.calculateRule(t);
+	}
+	public static <T,P> List<P> moveCalculation(T t,Predicate<T> pr,MoveCalculator<T,P> r) {
+		return (List<P>) r.calculatePositions(t,pr);
 	}
 	
 	public static <P,T> List<T> calculateMoves(P p,Predicate<P> pr){
