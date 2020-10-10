@@ -2,6 +2,8 @@ package no.games.chess;
 
 import java.util.List;
 
+import aima.core.agent.Percept;
+
 
 
 /**
@@ -10,7 +12,7 @@ import java.util.List;
  * This interface represent the state current state in the game of chess
  * @param <GameBoard> Represent the chess board in a game of chess
  */
-public interface ChessState<GameBoard> {
+public interface ChessState<GameBoard> extends Percept {
 	public GameBoard getBoard();
 	public List<ChessAction> getActions();
 	public ChessAction getAction();

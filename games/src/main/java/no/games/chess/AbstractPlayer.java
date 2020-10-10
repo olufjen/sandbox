@@ -16,6 +16,7 @@ public abstract class AbstractPlayer<GamePiece, PieceMove> implements ChessPlaye
 	}
 	protected static player whitePlayer = player.WHITE;
 	protected static player blackPlayer = player.BLACK;
+	protected String playerId = null;
 	
 	public abstract void collectmyPieces();
 
@@ -25,6 +26,7 @@ public abstract class AbstractPlayer<GamePiece, PieceMove> implements ChessPlaye
 
 	public void setWhitePlayer(player whitePlayer) {
 		this.whitePlayer = whitePlayer;
+		playerId = "WHITE";
 	}
 
 	public player getBlackPlayer() {
@@ -33,6 +35,18 @@ public abstract class AbstractPlayer<GamePiece, PieceMove> implements ChessPlaye
 
 	public void setBlackPlayer(player blackPlayer) {
 		this.blackPlayer = blackPlayer;
+		playerId = "BLACK";
 	}
+
+	public String getPlayerId() {
+		return playerId;
+	}
+
+	public void setPlayerId(String playerId) {
+		this.playerId = playerId;
+	}
+
+
+	
 	
 }

@@ -80,7 +80,6 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
      * @param <ChessState> The state of the game
      * @return A ChessAction
      */
-   
     public ChessAction  makeDecision(ChessState state) {
     	ChessState mystate = (ChessState)state;
     	
@@ -137,7 +136,7 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
             }
             store.append(newResults.toString());
  //           writer.println(logText);
-        } while (!timer.timeOutOccurred() && heuristicEvaluationUsed);
+        } while (!timer.timeOutOccurred() && heuristicEvaluationUsed ); // Added test of depthlimit removed 
         writer.println(logText);
         writer.println(store);
         writer.close();
@@ -155,6 +154,7 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
 	public List<ChessAction> orderActions(ChessState state,  List<ChessAction> list, ChessPlayer player, int depth) {
     	ActionStore<ChessAction> newResults = new ActionStore<>();
         ChessGame chessGame = (ChessGame) game;
+        writer.println("Ordering actions "+"depth/depthlimit "+depth+"/"+currDepthLimit+"\n");
 //        System.out.println("From orderAction\n");
     	for (ChessAction action:list) {
     		double rank = chessGame.analyzePieceandPosition(action);
@@ -166,10 +166,14 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
     public double maxValue(ChessState state, ChessPlayer player, double alpha, double beta, int depth) {
         updateMetrics(depth);
         if (game.isTerminal(state) || depth >= currDepthLimit || timer.timeOutOccurred()) {
+        	writer.println("maxValue Calling eval "+"depth/depthlimit "+depth+"/"+currDepthLimit+"\n");
             return eval(state, player);
         } else {
             double value = Double.NEGATIVE_INFINITY;
-            List<ChessAction> localActions = game.getActions(state);
+            List<ChessAction> localActions = game.getActions(state); //Produces a new set of actions for this state
+            if(player.getPlayerName() == player.getBlackPlayer()) {
+            	writer.println("Maxvalue Opponent to play "+player.getPlayerName()+"\n");
+            }
             for (ChessAction action : orderActions(state, localActions, player, depth)) {
                 value = Math.max(value, minValue(game.getResult(state, action), //
                         player, alpha, beta, depth + 1));
@@ -185,10 +189,14 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
     public double minValue(ChessState state, ChessPlayer player, double alpha, double beta, int depth) {
         updateMetrics(depth);
         if (game.isTerminal(state) || depth >= currDepthLimit || timer.timeOutOccurred()) {
+        	writer.println("minValue Calling eval "+"depth/depthlimit "+depth+"/"+currDepthLimit+"\n");
             return eval(state, player);
         } else {
             double value = Double.POSITIVE_INFINITY;
-            List<ChessAction> localActions = game.getActions(state);
+            List<ChessAction> localActions = game.getActions(state);//Produces a new set of actions for this state
+            if(player.getPlayerName() == player.getBlackPlayer()) {
+            	writer.println("Minvalue Opponent to play "+player.getPlayerName()+"\n");
+            }
             for (ChessAction action : orderActions(state,localActions, player, depth)) {
                 value = Math.min(value, maxValue(game.getResult(state, action), //
                         player, alpha, beta, depth + 1));
@@ -224,10 +232,13 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
 //          heuristicEvaluationUsed = true; Set in comment olj 10.08.20
         ChessGame chessGame = (ChessGame) game;
         double returnValue = chessGame.analyzeState(state);
-        if (returnValue == 0) {
+ /*       if (returnValue == 0) {
         	 heuristicEvaluationUsed = true; // indicates opponent to move
         }
-        return chessGame.analyzeState(state);
+
+        return chessGame.analyzeState(state);*/
+        heuristicEvaluationUsed = false;
+        return returnValue;
           
 /*          List<ChessAction> chessActions = chessState.getActions();
           ChessAction action = chessState.getAction();
@@ -290,9 +301,11 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
      * Primitive operation which is called at the beginning of one depth limited
      * search step. This implementation increments the current depth limit by
      * one.
+     * @since 2.10.20 Max depth is 1 OJN
      */
     protected void incrementDepthLimit() {
         currDepthLimit++;
+
     }
 
     /**

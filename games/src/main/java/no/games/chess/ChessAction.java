@@ -2,6 +2,8 @@ package no.games.chess;
 
 import java.util.List;
 
+import aima.core.agent.Action;
+
 
 
 
@@ -19,7 +21,7 @@ import java.util.List;
  * @param <GamePiece> Represent a ChessPiece
  * @param <PP> Represent the preferred position
  */
-public interface ChessAction<P, A, PR, GamePiece,PP> {
+public interface ChessAction<P, A, PR, GamePiece,PP> extends Action{
 	
 	public P getPositions();
 	public A getAvailablePositions();
