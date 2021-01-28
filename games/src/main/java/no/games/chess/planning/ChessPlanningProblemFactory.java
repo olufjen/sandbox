@@ -13,6 +13,7 @@ import java.util.List;
 /**
  * This class is a spesialized version of the 
  * Planning problem factory to generate planning problems.
+ * It is used for chess games
  * 
  * @author samagra
  */
@@ -36,7 +37,7 @@ public class ChessPlanningProblemFactory {
    * 
    * @return A PDDL description of an air cargo transportation planning problem.
    */
-  public static aima.core.logic.planning.Problem airCargoTransportProblem()
+  public static Problem airCargoTransportProblem()
   {
         State initialState = new State("At(C1,SFO)^At(C2,JFK)^At(P1,SFO)" +
                 "^At(P2,JFK)^Cargo(C1)^Cargo(C2)^Plane(P1)^Plane(P2)^Airport(JFK)^Airport(SFO)");
@@ -79,7 +80,7 @@ public class ChessPlanningProblemFactory {
    * 
    * @return The spare tire problem.
    */
-  public static aima.core.logic.planning.Problem spareTireProblem()
+  public static Problem spareTireProblem()
   {
         State initialState = new State("Tire(Flat)^Tire(Spare)^At(Flat,Axle)" +
                 "^At(Spare,Trunk)");
@@ -114,7 +115,7 @@ public class ChessPlanningProblemFactory {
    * 
    * @return The San Francisco Airport problem.
    */
-  public static aima.core.logic.planning.Problem goHomeToSFOProblem()
+  public static Problem goHomeToSFOProblem()
   {
         State initialState = new State("At(Home)");
         State goalState = new State("At(SFO)");
@@ -139,7 +140,7 @@ public class ChessPlanningProblemFactory {
    * @param problem
    * @return The Act HLA.
    */
-  public static ChessHighLevelAction getHlaAct(aima.core.logic.planning.Problem problem)
+  public static ChessHighLevelAction getHlaAct(Problem problem)
   {
         List<List<ActionSchema>> refinements = new ArrayList<>();
         ChessHighLevelAction act = new ChessHighLevelAction("Chessplan", null, "", "", refinements);
