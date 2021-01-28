@@ -84,7 +84,7 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
     	ChessState mystate = (ChessState)state;
     	
         metrics = new Metrics();
-        StringBuffer logText = null;
+        StringBuffer logText = new StringBuffer("Log\n");
         StringBuffer store = new StringBuffer("Ordered actions");
         ChessPlayer player =  (ChessPlayer) game.getPlayer(mystate);
         ChessGame chessGame = (ChessGame) game;
