@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * This class is a spesialized version of the 
  * Planning problem factory to generate planning problems.
- * It is used for chess games
+ * It is used for chess games in this project
  * 
  * @author samagra
  */
