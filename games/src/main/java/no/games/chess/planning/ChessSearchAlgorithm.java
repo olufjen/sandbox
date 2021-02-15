@@ -1,6 +1,7 @@
 
 package no.games.chess.planning;
 
+import aima.core.logic.fol.kb.data.Literal;
 import aima.core.logic.planning.ActionSchema;
 import aima.core.logic.planning.PlanningProblemFactory;
 import aima.core.logic.planning.Problem;
@@ -38,11 +39,19 @@ import java.util.*;
  * @author samagra
  */
 public class ChessSearchAlgorithm {
-  private FileWriter fw =  null;
+	private FileWriter fw =  null;
 
-  private PrintWriter writer =  null;
+	private PrintWriter writer =  null;
+	private ChessProblem problem;
+	private List<ActionSchema> reserveplan = new ArrayList<ActionSchema>();
 
-  public FileWriter getFw() {
+  public ChessSearchAlgorithm(FileWriter fw, PrintWriter writer) {
+	super();
+	this.fw = fw;
+	this.writer = writer;
+}
+
+public FileWriter getFw() {
 		return fw;
   }
 
@@ -64,21 +73,39 @@ public class ChessSearchAlgorithm {
    * @param problem The planning problem.
    * @return A list of actions representing the plan.
    */
-  public List<aima.core.logic.planning.ActionSchema> heirarchicalSearch(aima.core.logic.planning.Problem problem) {
+  public List<ActionSchema> heirarchicalSearch(ChessProblem problem) {
         // frontier ← a FIFO queue with [Act] as the only element
- 
+	  this.problem = problem;
         Queue<List<ActionSchema>> frontier = new LinkedList<>();
-        frontier.add(new ArrayList<>(Collections.singletonList(ChessPlanningProblemFactory.getHlaAct(problem))));
+
+//        frontier.add(new ArrayList<>(Collections.singletonList(ChessPlanningProblemFactory.getHlaAct(problem))));
+        ChessHighLevelAction hlax =  ChessPlanningProblemFactory.getHlaAct(problem);
+        String content = hlax.toString();
+        writer.println("\nInside chess search The HLA:\n");
+        writer.println(content);
+        writer.println("** End HLA **\n");
+        frontier.add(Collections.singletonList(hlax));
+    
         // loop do
         while (true) {
             // if EMPTY?(frontier) then return failure
-            if (frontier.isEmpty())
-                return null;
+            if (frontier.isEmpty()) {
+            	writer.println("\nEnd chess search \n");
+            	writer.flush();
+            	return reserveplan;
+//                return null;
+            }
             // plan ← POP(frontier) /* chooses the shallowest plan in frontier */
+            /*
+             * At present the plan contains only one HLA action with refinements
+             */
             List<ActionSchema> plan = frontier.poll();
             // hla ← the first HLA in plan, or null if none
             int i = 0;
-            ActionSchema hla;
+            ActionSchema hla; 
+            /*
+             * This procedure make sure that the hla is a HLA schema
+             */
             while (i < plan.size() && !(plan.get(i) instanceof ChessHighLevelAction))
                 i++;
             if (i < plan.size())
@@ -86,6 +113,7 @@ public class ChessSearchAlgorithm {
             else
                 hla = null;
             // prefix,suffix ← the action subsequences before and after hla in plan
+            
             List<ActionSchema> prefix = new ArrayList<>();
             List<ActionSchema> suffix = new ArrayList<>();
             for (int j = 0; j < i; j++) {
@@ -96,11 +124,21 @@ public class ChessSearchAlgorithm {
             }
             // outcome ← RESULT(problem.INITIAL-STATE, prefix)
             State outcome = problem.getInitialState().result(prefix);
-            // if hla is null then /* so plan is primitive and outcome is its result */
+            // if hla is null then /* so plan is primitive and outcome is its result See pseudocode p. 409*/
             if (hla == null) {
                 // if outcome satisfies problem.GOAL then return plan
-                if (outcome.getFluents().containsAll(problem.getGoalState().getFluents()))
+                if (outcome.getFluents().containsAll(problem.getGoalState().getFluents())) {
                     return plan;
+                }else { // This is added logic: to make sure to return a spare plan
+                    List <Literal> goalfluents = outcome.getFluents();
+                    writer.println("The fluents of end outcome:\n");
+                    for (Literal l: goalfluents) {
+                        writer.println(l.toString());
+                    }
+                	writer.println("\nEnd chess search with a reserve plan \n");
+                	writer.flush();
+                	return reserveplan;
+                }
             } else {
                 List<ActionSchema> tempInsertionList = new ArrayList<>();
                 // else for each sequence in REFINEMENTS(hla, outcome, hierarchy) do
@@ -126,8 +164,18 @@ public class ChessSearchAlgorithm {
    * @param outcome The state in which the refinements are to be applied.
    * @return List of all refinements of the current hla in a given outcome state.
    */
-  public List<List<ActionSchema>> refinements(aima.core.logic.planning.ActionSchema hla, aima.core.logic.planning.State outcome) {
+  public List<List<ActionSchema>> refinements(ActionSchema hla,State outcome) {
         List<List<ActionSchema>> result = new ArrayList<>();
+        writer.println("The fluents of outcome: (= problem.getInitialState().result(prefix))\n");
+        List<Literal> fluents = outcome.getFluents();
+        List <Literal> goalfluents = problem.getGoalState().getFluents();
+        for (Literal l: fluents) {
+            writer.println(l.toString());
+        }
+        writer.println("The fluents of goalstate\n");
+        for (Literal l: goalfluents) {
+            writer.println(l.toString());
+        }   
         for (List<ActionSchema> refinement :
                 ((ChessHighLevelAction) hla).getRefinements()) {
             if (refinement.size() > 0) {
@@ -135,6 +183,15 @@ public class ChessSearchAlgorithm {
                     result.add(refinement);
             } else
                 result.add(refinement);
+        }
+        writer.println("The refinements:\n");
+        for (List<ActionSchema> refinement :
+            ((ChessHighLevelAction) hla).getRefinements()) {
+        	for (ActionSchema schema:refinement) {
+        		writer.println(schema.toString());
+        		reserveplan.add(schema);
+        	}
+        	
         }
         return result;
   }

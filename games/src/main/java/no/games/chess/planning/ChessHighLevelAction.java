@@ -15,8 +15,8 @@ import java.util.List;
  * 
  * @author samagra
  */
-public class ChessHighLevelAction extends aima.core.logic.planning.ActionSchema {
-  List<List<ActionSchema>> refinements;
+public class ChessHighLevelAction extends ActionSchema {
+  private List<List<ActionSchema>> refinements;
 
   public ChessHighLevelAction(String name, List<Term> variables, String precondition, String effects, List<List<ActionSchema>> refinements) {
         super(name, variables, precondition, effects);

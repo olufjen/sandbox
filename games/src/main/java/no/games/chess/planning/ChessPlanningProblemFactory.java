@@ -134,17 +134,23 @@ public class ChessPlanningProblemFactory {
 
   /**
    * Generates the ChessHLA for a chess problem.
+   * 
    * Chapter 11.2.2 Searching for primitive solutions:
    * For each primitive action a, provide one refinement of Act with steps {a,Act}.
    * Act is the HLA.
    * @param problem
    * @return The Act HLA.
    */
-  public static ChessHighLevelAction getHlaAct(Problem problem)
+  public static ChessHighLevelAction getHlaAct(ChessProblem problem)
   {
         List<List<ActionSchema>> refinements = new ArrayList<>();
         ChessHighLevelAction act = new ChessHighLevelAction("Chessplan", null, "", "", refinements);
-        List<ActionSchema> schemas =  problem.getPropositionalisedActions();
+/*
+ * THe call to getPropositionalisedActions() must produce a set of refinements of primitive actions to
+ * be used in the HLA.        
+ */
+ //       List<ActionSchema> schemas =  problem.getPropositionalisedActions();
+        List<ActionSchema> schemas =  problem.getGroundActions();
 /*        System.out.println("primitive actions");
         for (ActionSchema primitiveAction :
             schemas) {
