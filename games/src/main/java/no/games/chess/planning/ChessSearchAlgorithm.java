@@ -100,6 +100,14 @@ public FileWriter getFw() {
              * At present the plan contains only one HLA action with refinements
              */
             List<ActionSchema> plan = frontier.poll();
+/*
+ * Added logic: If plan is empty but frontier is not then retrieve next plan olj 15.02.21            
+ */
+            boolean finish = false;
+            if (plan.isEmpty() && !frontier.isEmpty()) {
+            	plan = frontier.poll();
+            	finish = true;
+            }
             // hla ← the first HLA in plan, or null if none
             int i = 0;
             ActionSchema hla; 
@@ -108,7 +116,7 @@ public FileWriter getFw() {
              */
             while (i < plan.size() && !(plan.get(i) instanceof ChessHighLevelAction))
                 i++;
-            if (i < plan.size())
+            if (i < plan.size() && !finish) // added the boolean finish olj 15.02.21
                 hla = plan.get(i);
             else
                 hla = null;
@@ -128,6 +136,11 @@ public FileWriter getFw() {
             if (hla == null) {
                 // if outcome satisfies problem.GOAL then return plan
                 if (outcome.getFluents().containsAll(problem.getGoalState().getFluents())) {
+                	List <Literal> goalfluents = outcome.getFluents();
+                    writer.println(" Returns with a plan: The fluents of end outcome:\n");
+                    for (Literal l: goalfluents) {
+                        writer.println(l.toString());
+                    }
                     return plan;
                 }else { // This is added logic: to make sure to return a spare plan
                     List <Literal> goalfluents = outcome.getFluents();
@@ -151,6 +164,7 @@ public FileWriter getFw() {
                     tempInsertionList.addAll(suffix);
                     ((LinkedList<List<ActionSchema>>) frontier).addLast(new ArrayList<>(tempInsertionList));
                 }
+                writer.println("\nEnd of insertion list \n");
             }
         }
   }
@@ -166,16 +180,16 @@ public FileWriter getFw() {
    */
   public List<List<ActionSchema>> refinements(ActionSchema hla,State outcome) {
         List<List<ActionSchema>> result = new ArrayList<>();
-        writer.println("The fluents of outcome: (= problem.getInitialState().result(prefix))\n");
+//        writer.println("The fluents of outcome: (= problem.getInitialState().result(prefix))\n");
         List<Literal> fluents = outcome.getFluents();
         List <Literal> goalfluents = problem.getGoalState().getFluents();
-        for (Literal l: fluents) {
+/*        for (Literal l: fluents) {
             writer.println(l.toString());
         }
         writer.println("The fluents of goalstate\n");
         for (Literal l: goalfluents) {
             writer.println(l.toString());
-        }   
+        }   */
         for (List<ActionSchema> refinement :
                 ((ChessHighLevelAction) hla).getRefinements()) {
             if (refinement.size() > 0) {
@@ -184,11 +198,11 @@ public FileWriter getFw() {
             } else
                 result.add(refinement);
         }
-        writer.println("The refinements:\n");
+ //       writer.println("The refinements:\n");
         for (List<ActionSchema> refinement :
             ((ChessHighLevelAction) hla).getRefinements()) {
         	for (ActionSchema schema:refinement) {
-        		writer.println(schema.toString());
+//        		writer.println(schema.toString());
         		reserveplan.add(schema);
         	}
         	
