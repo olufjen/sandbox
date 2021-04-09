@@ -190,7 +190,7 @@ public class ChessSearchImpl implements ChessSearch {
 	        } else {
 	          heuristicEvaluationUsed = true;
 	      
-	          List<ChessAction> chessActions = state.getActions();
+//	          List<ChessAction> chessActions = state.getActions();
 	          ChessAction action = state.getAction();
 	        
 	          if (action != null)
