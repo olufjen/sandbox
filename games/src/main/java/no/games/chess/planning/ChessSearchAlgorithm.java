@@ -137,15 +137,25 @@ public FileWriter getFw() {
                 // if outcome satisfies problem.GOAL then return plan
                 if (outcome.getFluents().containsAll(problem.getGoalState().getFluents())) {
                 	List <Literal> goalfluents = outcome.getFluents();
+                    List<Literal> statefluents = problem.getGoalState().getFluents();
                     writer.println(" Returns with a plan: The fluents of end outcome:\n");
                     for (Literal l: goalfluents) {
+                        writer.println(l.toString());
+                    }
+                    writer.println("The fluents of goal state:\n");
+                    for (Literal l: statefluents) {
                         writer.println(l.toString());
                     }
                     return plan;
                 }else { // This is added logic: to make sure to return a spare plan
                     List <Literal> goalfluents = outcome.getFluents();
+                    List<Literal> statefluents = problem.getGoalState().getFluents();
                     writer.println("The fluents of end outcome:\n");
                     for (Literal l: goalfluents) {
+                        writer.println(l.toString());
+                    }
+                    writer.println("The fluents of goal state:\n");
+                    for (Literal l: statefluents) {
                         writer.println(l.toString());
                     }
                 	writer.println("\nEnd chess search with a reserve plan \n");
