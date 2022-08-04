@@ -19,6 +19,7 @@ import aima.core.logic.propositional.kb.KnowledgeBase;
 /**
  * @since 30.11.20
  * This is my own implementation of The backward chaining inference procedure OLJ 30.11.20
+ * It is a copy of FOLBCAsk
  * Artificial Intelligence A Modern Approach (3rd Edition): Figure 9.6, page
  * 338.<br>
  * <br>

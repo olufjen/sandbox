@@ -44,6 +44,7 @@ public class ChessSearchAlgorithm {
 	private PrintWriter writer =  null;
 	private ChessProblem problem;
 	private List<ActionSchema> reserveplan = new ArrayList<ActionSchema>();
+	private List<ActionSchema> allPrefix = null;
 
   public ChessSearchAlgorithm(FileWriter fw, PrintWriter writer) {
 	super();
@@ -77,7 +78,7 @@ public FileWriter getFw() {
         // frontier ← a FIFO queue with [Act] as the only element
 	  this.problem = problem;
         Queue<List<ActionSchema>> frontier = new LinkedList<>();
-
+        allPrefix = new ArrayList<ActionSchema>();
 //        frontier.add(new ArrayList<>(Collections.singletonList(ChessPlanningProblemFactory.getHlaAct(problem))));
         ChessHighLevelAction hlax =  ChessPlanningProblemFactory.getHlaAct(problem);
         String content = hlax.toString();
@@ -127,11 +128,13 @@ public FileWriter getFw() {
             for (int j = 0; j < i; j++) {
                 prefix.add(plan.get(j));
             }
+            allPrefix.addAll(prefix);
             for (int j = i + 1; j < plan.size(); j++) {
                 suffix.add(plan.get(j));
             }
             // outcome ← RESULT(problem.INITIAL-STATE, prefix)
-            State outcome = problem.getInitialState().result(prefix);
+//            State outcome = problem.getInitialState().result(prefix);
+            State outcome = problem.getInitialState().result(allPrefix);
             // if hla is null then /* so plan is primitive and outcome is its result See pseudocode p. 409*/
             if (hla == null) {
                 // if outcome satisfies problem.GOAL then return plan
@@ -163,6 +166,7 @@ public FileWriter getFw() {
                 	return reserveplan;
                 }
             } else {
+            	 writer.println("\nHLA is not null \n");
                 List<ActionSchema> tempInsertionList = new ArrayList<>();
                 // else for each sequence in REFINEMENTS(hla, outcome, hierarchy) do
                 for (List<ActionSchema> sequence :
@@ -209,6 +213,7 @@ public FileWriter getFw() {
                 result.add(refinement);
         }
  //       writer.println("The refinements:\n");
+        reserveplan.clear();
         for (List<ActionSchema> refinement :
             ((ChessHighLevelAction) hla).getRefinements()) {
         	for (ActionSchema schema:refinement) {

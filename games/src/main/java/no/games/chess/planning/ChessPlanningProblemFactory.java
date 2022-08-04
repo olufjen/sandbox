@@ -144,6 +144,12 @@ public class ChessPlanningProblemFactory {
   public static ChessHighLevelAction getHlaAct(ChessProblem problem)
   {
         List<List<ActionSchema>> refinements = new ArrayList<>();
+/*
+ * The parameters are:
+ * The name of the action, A list of variables (Terms, Variable, and Constant implement Term),
+ * "Precondition, "Effects", A list of ActionSchemas (refinements).
+ * This is so because ChessHighLevelAction is a subclass of ActionSchema        
+ */
         ChessHighLevelAction act = new ChessHighLevelAction("Chessplan", null, "", "", refinements);
 /*
  * THe call to getPropositionalisedActions() must produce a set of refinements of primitive actions to
