@@ -15,9 +15,9 @@ import java.util.List;
  * <p>
  * A Percept Schema is created to solve a partially observable problem as described on page 416
  * A Precept Schema is essentially a copy of the Action Schema, with the following changes:
- * The schema consists of the percept  name, a list of all the variables used in the schema, a
+ * The schema consists of the percept  name, a list of all the variables used in the schema, and a
  * precondition. A precept schema has no effects.
- *
+ * The rule (p. 368) An action a is applicable in state s if the preconditions of a are satisfied by s.
  * @author Oluf Jensen
  */
 public class PerceptSchema {

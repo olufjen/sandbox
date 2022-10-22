@@ -161,6 +161,7 @@ public FileWriter getFw() {
             // if hla is null then /* so plan is primitive and outcome is its result See pseudocode p. 409*/
             if (hla == null) {
                 // if outcome satisfies problem.GOAL then return plan
+            	// The end outcome contains the initial state and the goal state
                 if (outcome.getFluents().containsAll(problem.getGoalState().getFluents())) {
                 	List <Literal> goalfluents = outcome.getFluents();
                     List<Literal> statefluents = problem.getGoalState().getFluents();
@@ -245,12 +246,18 @@ public FileWriter getFw() {
         for (List<ActionSchema> refinement :
                 ((ChessHighLevelAction) hla).getRefinements()) {
             if (refinement.size() > 0) {
-                if (outcome.isApplicable(refinement.get(0))) {
+                if (outcome.isApplicable(refinement.get(0))) { // A refinement (an action a) is applicable in the state s if:
+                												// the preconditions of a are satisfied by s
+                												// this.getFluents().containsAll(a.getPrecondition());
                     result.add(refinement);
                     writer.println("Refinement is applicable "+refinement.get(0).toString());
+                }else {
+                	writer.println("Refinement is NOT applicable "+refinement.get(0).getName());
                 }
-            } else
+            } else {
                 result.add(refinement);
+                writer.println("Refinement is empty");
+            }
         }
  //       writer.println("The refinements:\n");
         reserveplan.clear();
