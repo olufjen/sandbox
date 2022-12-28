@@ -6,6 +6,7 @@ import aima.core.logic.fol.parsing.ast.Predicate;
 import aima.core.logic.fol.parsing.ast.Term;
 import aima.core.logic.fol.parsing.ast.Variable;
 import aima.core.logic.planning.Utils;
+import no.games.chess.ChessVariables;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,13 +89,39 @@ public class PerceptSchema {
         List<Literal> precondList = this.getPrecondition();
         List<Term> vars = this.getVariables();
         List<Literal> newPrecond = new ArrayList<>();
+        String pieceVariable = ChessVariables.getPieceVariable(); // These variables a specific to the chess game
+        String typeVariable = ChessVariables.getTypeVariable();
+        String playerColor = ChessVariables.getPlayerColor();
         for (Literal precondition :
                 precondList) {
             List<Term> newTerms = new ArrayList<>();
             for (Term variable :
                     precondition.getAtomicSentence().getArgs()) {
+            	String varName = variable.getSymbolicName();
                 if (variable instanceof Variable) {
-                    newTerms.add(constants.get(vars.lastIndexOf(variable)));
+                 	if (varName.equals(pieceVariable)) {
+                		for (Constant c:constants) {
+                			String cname = c.getSymbolicName();
+                			if (cname.contains(playerColor)) {
+                				 newTerms.add(c);
+                				 break;
+                			}
+                		}
+                	}
+                	if (varName.equals(typeVariable)) {
+                		for (Constant c:constants) {
+                			String cname = c.getSymbolicName();
+                			String rc = ChessVariables.checkPiecetype(cname);
+                			if (rc != null) {
+                				 newTerms.add(c);
+                				 break;
+                			}
+                			
+                		}
+                	}
+/*                	int index = vars.lastIndexOf(variable);
+                	Constant c = constants.get(vars.lastIndexOf(variable));
+                    newTerms.add(c);*/
                 } else
                     newTerms.add(variable);
             }
