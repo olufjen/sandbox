@@ -7,10 +7,10 @@ import aima.core.search.adversarial.Game;
 /**
  * This interface represent a ChessGame
  * It extends the Game interface
- * The Game intrerface has three type parameters:
+ * The Game interface has three type parameters:
  * <S> A type representing the states of the game
  * <A> A type representing the actions of the game
- * <P> A type representing the playeers of the game
+ * <P> A type representing the players of the game
  * In the ChessGame interface these types are represented by the
  * ChessState, 
  * ChessAction, and

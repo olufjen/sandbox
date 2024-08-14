@@ -10,6 +10,11 @@ import aima.core.search.framework.Metrics;
 
 
 
+/**
+ * @since Jan 2021 NOT USED
+ * @author oluf
+ *
+ */
 public class ChessSearchImpl implements ChessSearch {
 	   public final static String METRICS_NODES_EXPANDED = "nodesExpanded";
 	    public final static String METRICS_MAX_DEPTH = "maxDepth";
