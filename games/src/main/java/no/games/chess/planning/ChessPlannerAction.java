@@ -22,5 +22,7 @@ import aima.core.logic.planning.ActionSchema;
 public interface ChessPlannerAction<ActionSchema> extends Action {
 	public ActionSchema getActionSchema();
 	public List<ActionSchema> getActionSchemas();
+	public PlannerState findPlannerState(PlannerState s);
+	
 	
 }

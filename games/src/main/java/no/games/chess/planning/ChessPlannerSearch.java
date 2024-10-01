@@ -70,7 +70,7 @@ public class ChessPlannerSearch extends IterativeDeepeningAlphaBetaSearch<Planne
         ChessPlayer player =  (ChessPlayer) game.getPlayer(mystate);
         PlannerGame plannerGame = (PlannerGame) game;
         List<ChessPlannerAction> actions = plannerGame.getActions(mystate);
-        List<ChessPlannerAction> results =  orderActions(mystate, actions, player, 0); // Analysis of ChessPLannerAction and the Action Schemas
+        List<ChessPlannerAction> results =  orderActions(mystate, actions, player, 0); // Analysis of ChessPlannerAction and the Action Schemas
         timer.start();
         currDepthLimit = 1;
         do {
@@ -79,6 +79,9 @@ public class ChessPlannerSearch extends IterativeDeepeningAlphaBetaSearch<Planne
                 logText = new StringBuffer("New while with depth " + currDepthLimit + ": \n");
             heuristicEvaluationUsed = false;
             ActionStore<ChessPlannerAction> newResults = new ActionStore<>();
+/*
+ * Here we need an alternative to a minimax search!! OJN 23.08.24            
+ */
             for (ChessPlannerAction action : results) { // Do a minimax search on ordered actions
                 double value = minValue(game.getResult(state, action), player, Double.NEGATIVE_INFINITY,
                         Double.POSITIVE_INFINITY, 1);
@@ -121,7 +124,7 @@ public class ChessPlannerSearch extends IterativeDeepeningAlphaBetaSearch<Planne
         writer.println(logText);
         writer.println(store);
         writer.close();
-        return results.get(0); // Returns the best ChessPLannerAction
+        return results.get(0); // Returns the best ChessPlannerAction
     }
 
     public double maxValue(PlannerState state, ChessPlayer player, double alpha, double beta, int depth) {

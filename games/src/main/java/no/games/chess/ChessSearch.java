@@ -2,6 +2,12 @@ package no.games.chess;
 
 import aima.core.search.framework.Metrics;
 
+/**
+ * ChessSearch 
+ * This interface is for the minimax search
+ * @author 
+ *
+ */
 public interface ChessSearch  {
 	
 	

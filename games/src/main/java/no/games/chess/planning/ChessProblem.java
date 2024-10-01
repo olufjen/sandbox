@@ -13,8 +13,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * THis is the chess version of the Problem class
- * 
+ * This is the chess version of the Problem class used in planning procedures
+ * See also page 368
  * Artificial Intelligence A Modern Approach (3rd Edition): page
  * 383.<br>
  * <br>

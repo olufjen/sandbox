@@ -12,6 +12,7 @@ import aima.core.search.framework.Metrics;
 
 /**
  * @since Jan 2021 NOT USED
+ * @see ChessAlphaBetaSearch. Both of these searchclasses are for minimax search
  * @author oluf
  *
  */

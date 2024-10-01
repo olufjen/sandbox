@@ -10,6 +10,7 @@ import aima.core.logic.fol.parsing.ast.Term;
  * @author Oluf
  *
  */
+
 public interface FunctionExecutor {
 	public Object execute();
 	public void buildTerms(HashMap<String,Term> cParam,HashMap<String,Term> vParam);
