@@ -17,5 +17,8 @@ public class ChessNode extends Node<PlannerState, ChessPlannerAction> {
 		super(state);
 		// TODO Auto-generated constructor stub
 	}
+	public ChessNode(PlannerState state, ChessNode parent, ChessPlannerAction action, double pathCost) {
+		super(state,parent,action,pathCost);
 
+	}
 }

@@ -22,4 +22,5 @@ public interface PlannerState {
 	public double getUtility();
 	public void setUtility(double utility);
 	public ChessPlayer getPlayerTomove();
+	public boolean testEnd(ChessPlannerAction a);
 }

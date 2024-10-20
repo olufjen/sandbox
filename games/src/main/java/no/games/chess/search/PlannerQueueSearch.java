@@ -1,5 +1,9 @@
 package no.games.chess.search;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
+import aima.core.logic.planning.ActionSchema;
 import aima.core.search.framework.Node;
 import aima.core.search.framework.NodeExpander;
 import aima.core.search.framework.qsearch.QueueSearch;
@@ -21,6 +25,7 @@ public class PlannerQueueSearch extends QueueSearch<PlannerState, ChessPlannerAc
 	 */
 	public PlannerQueueSearch(NodeExpander<PlannerState, ChessPlannerAction> nodeExpander) {
 		super(nodeExpander);
+		frontier = new LinkedList<Node<PlannerState, ChessPlannerAction>>();
 		// TODO Auto-generated constructor stub
 	}
 
@@ -32,14 +37,32 @@ public class PlannerQueueSearch extends QueueSearch<PlannerState, ChessPlannerAc
 
 	@Override
 	protected Node<PlannerState, ChessPlannerAction> removeFromFrontier() {
+//		cleanUpFrontier(); // not really necessary because isFrontierEmpty
+		// should be called before...
+		Node<PlannerState, ChessPlannerAction> result = frontier.remove();
+		updateMetrics(frontier.size());
+		// add the node to the explored set of the corresponding problem
+//		setExplored(result);
+		return result;
+
+	}
+
+	private void setExplored(Node<PlannerState, ChessPlannerAction> result) {
+		// TODO Auto-generated method stub
 		
-		return null;
 	}
 
 	@Override
 	protected boolean isFrontierEmpty() {
-		// TODO Auto-generated method stub
-		return false;
+		boolean empty = frontier.isEmpty();
+		return empty;
 	}
 
+	public Queue<Node<PlannerState, ChessPlannerAction>> getFrontier() {
+		return frontier;
+	}
+
+	public void setFrontier(Queue<Node<PlannerState, ChessPlannerAction>> frontier) {
+		this.frontier = frontier;
+	}
 }

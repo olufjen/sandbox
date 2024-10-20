@@ -13,6 +13,7 @@ import aima.core.search.framework.QueueBasedSearch;
 import aima.core.search.framework.QueueFactory;
 import aima.core.search.framework.SearchForActions;
 import aima.core.search.framework.SearchForStates;
+import aima.core.search.framework.SearchUtils;
 import aima.core.search.framework.problem.Problem;
 import aima.core.search.framework.qsearch.QueueSearch;
 import aima.core.search.informed.BestFirstSearch;
@@ -33,6 +34,8 @@ public class PlannerQueueBasedSearch extends BestFirstSearch<PlannerState, Chess
 	private PlannerState state;
 	private ChessPlannerAction action;
 	private PlannerQueueSearch impl;
+	private Node chNode;
+	private ChessNode chessNode;
 	public PlannerQueueBasedSearch(PlannerQueueSearch impl,
 			ToDoubleFunction<Node<PlannerState, ChessPlannerAction>> h) {
 		super(impl,new EvalFunction<>(h));
@@ -53,10 +56,13 @@ public class PlannerQueueBasedSearch extends BestFirstSearch<PlannerState, Chess
 		this.state = state;
 		this.action = action;
 		NodeExpander exp = impl.getNodeExpander().useParentLinks(true);
-		ChessNode node = (ChessNode) exp.createRootNode(state);
+		chNode = new ChessNode(state);		
+/*		Node node = exp.createRootNode(state);
+		chNode = node;*/
+		chessNode = (ChessNode) chNode;
 		this.impl =  impl;
-		this.impl.addToFrontier(node);
-//		queue.add(node);
+		this.impl.addToFrontier(chNode);
+//		queue.add(node);ch
 		
 	}
 
@@ -84,8 +90,26 @@ public class PlannerQueueBasedSearch extends BestFirstSearch<PlannerState, Chess
 
 	@Override
 	public Optional<PlannerState> findState(Problem<PlannerState, ChessPlannerAction> p) {
-		// TODO Auto-generated method stub
-		return super.findState(p);
+		/*
+		 * copied from super.findstate
+		 */
+		impl.getNodeExpander().useParentLinks(false);
+		impl.getFrontier().clear();
+		Node localnode = null;
+		PlannerState state = null;
+
+		Optional<Node<PlannerState, ChessPlannerAction>> node = impl.findNode(p,impl.getFrontier());
+		if (node.isPresent()) {
+			localnode = node.get();
+			state =(PlannerState) localnode.getState();
+			Optional<PlannerState> optstate = Optional.ofNullable(state);
+			if(optstate.isPresent()) {
+				return SearchUtils.toState(node);
+			}
+		}
+		Optional<PlannerState> optState = Optional.ofNullable(state);
+		return optState;
+
 	}
 
 	@Override
@@ -102,11 +126,11 @@ public class PlannerQueueBasedSearch extends BestFirstSearch<PlannerState, Chess
      * @param <ChessPlannerAction>
      */
     public static class EvalFunction<PlannerState, ChessPlannerAction> extends HeuristicEvaluationFunction<PlannerState, ChessPlannerAction> {
-        private ToDoubleFunction<ChessNode> g;
+        private ToDoubleFunction<Node> g;
 
         public EvalFunction(ToDoubleFunction<Node<PlannerState, ChessPlannerAction>> h) {
             this.h = h;
-            this.g = ChessNode::getPathCost; // Thge  definition of the functional interface
+            this.g = Node::getPathCost; // The  definition of the functional interface
         }
 
         /**
@@ -119,7 +143,7 @@ public class PlannerQueueBasedSearch extends BestFirstSearch<PlannerState, Chess
         @Override
         public double applyAsDouble(Node<PlannerState, ChessPlannerAction> n) {
             // f(n) = g(n) + h(n)
-            return g.applyAsDouble((ChessNode) n) + h.applyAsDouble(n);
+            return g.applyAsDouble((Node) n) + h.applyAsDouble(n);
         }
     }
 }

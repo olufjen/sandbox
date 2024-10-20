@@ -23,6 +23,6 @@ public interface ChessPlannerAction<ActionSchema> extends Action {
 	public ActionSchema getActionSchema();
 	public List<ActionSchema> getActionSchemas();
 	public PlannerState findPlannerState(PlannerState s);
-	
+	public PlannerState findPlannerState(ChessPlannerAction a);
 	
 }
