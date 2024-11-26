@@ -23,4 +23,5 @@ public interface PlannerState {
 	public void setUtility(double utility);
 	public ChessPlayer getPlayerTomove();
 	public boolean testEnd(ChessPlannerAction a);
+	public List<ActionSchema> getOtherSchemaList();
 }
