@@ -23,7 +23,9 @@ import no.games.chess.planning.ChessPlannerAction;
 import no.games.chess.planning.PlannerState;
 
 /**
- * This is the chess game subclass of QueueBasedSearch.
+ * This is the chess game subclass of BestFirstSearch and QueueBasedSearch.
+ * BestFirstSearch is described in Chapter 3.5 page 92 in the AIMA book.
+ * The algorithm for the search is shown in fig 3.14 p. 84 
  * It uses the subclass PlannerQueueSearch as the implementation for QueueSearch
  * @author oluf
  *
@@ -39,7 +41,7 @@ public class PlannerQueueBasedSearch extends BestFirstSearch<PlannerState, Chess
 	public PlannerQueueBasedSearch(PlannerQueueSearch impl,
 			ToDoubleFunction<Node<PlannerState, ChessPlannerAction>> h) {
 		super(impl,new EvalFunction<>(h));
-
+		this.impl = impl;
 	}
 
 	/**
@@ -88,6 +90,13 @@ public class PlannerQueueBasedSearch extends BestFirstSearch<PlannerState, Chess
 		return super.findActions(p);
 	}
 
+	/**
+	 * Receives a problem and a queue implementing the search strategy and
+	 * computes a node referencing a goal state, if such a state was found.
+	 * @param problem
+	 *            the search problem
+	 *  
+	 */
 	@Override
 	public Optional<PlannerState> findState(Problem<PlannerState, ChessPlannerAction> p) {
 		/*

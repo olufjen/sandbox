@@ -7,6 +7,7 @@ import aima.core.logic.fol.parsing.ast.Term;
 
 /**
  * This interface is used to define functions to be executed
+ * It is specialized for creating Terms to be used in creating Predicates (See Knowledgebuilder)
  * @author Oluf
  *
  */
