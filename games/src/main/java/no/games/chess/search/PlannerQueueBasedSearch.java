@@ -35,7 +35,7 @@ public class PlannerQueueBasedSearch extends BestFirstSearch<PlannerState, Chess
 
 	private PlannerState state;
 	private ChessPlannerAction action;
-	private PlannerQueueSearch impl;
+	private PlannerQueueSearch impl;//The implementation of the queue search
 	private Node chNode;
 	private ChessNode chessNode;
 	public PlannerQueueBasedSearch(PlannerQueueSearch impl,
@@ -62,7 +62,7 @@ public class PlannerQueueBasedSearch extends BestFirstSearch<PlannerState, Chess
 /*		Node node = exp.createRootNode(state);
 		chNode = node;*/
 		chessNode = (ChessNode) chNode;
-		this.impl =  impl;
+		this.impl =  impl; // The implementation of the queue search
 		this.impl.addToFrontier(chNode);
 //		queue.add(node);ch
 		

@@ -30,9 +30,9 @@ import java.util.stream.Collectors;
  * @author samagra
  */
 public class ChessProblem {
-    State initialState;// initialState
-    Set<ActionSchema> actionSchemas;// Planning Domain
-    State goalState;// goalState
+    private State initialState;// initialState
+    private Set<ActionSchema> actionSchemas;// Planning Domain
+    private State goalState;// goalState
     private String predSymbol = "occupies";
     private List<String> pieceNames;
 

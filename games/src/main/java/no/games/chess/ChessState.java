@@ -10,6 +10,7 @@ import aima.core.agent.Percept;
  * @author oluf
  *
  * This interface represent the state current state in the game of chess
+ * The implementations contains all available chess actions.
  * @param <GameBoard> Represent the chess board in a game of chess
  */
 public interface ChessState<GameBoard> extends Percept {
