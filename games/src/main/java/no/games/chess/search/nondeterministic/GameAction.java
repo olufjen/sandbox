@@ -42,5 +42,7 @@ public class GameAction {
 	public void setGamePiece(GamePiece<?> gamePiece) {
 		this.gamePiece = gamePiece;
 	}
-	
+	public List<GameState> getStates(){
+		return null;
+	}
 }

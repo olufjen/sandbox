@@ -45,6 +45,7 @@ public class GameState {
 	protected ActionSchema actionSchema;
 	protected String[] notations;// of the form:  {startpos,piecename,endpos,piecetype}
 	protected String algebraicNotation; // algebraic notation for possible move
+	protected GameAction action;
 	
 	public GameState(GamePiece<?> gamePiece, ActionSchema actionSchema) {
 		super();
@@ -54,4 +55,7 @@ public class GameState {
 	public List<GameAction> getActions(){
 		return null;
 	};
+	public boolean testEnd(GameAction action) {
+		return true;
+	}
 }
