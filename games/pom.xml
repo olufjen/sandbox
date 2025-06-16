@@ -118,6 +118,13 @@
     	<artifactId>simpleEducationalLearningSchemes</artifactId>
     	<version>1.0.2</version>
 	</dependency>
+
+    <dependency>
+        <groupId>io.vavr</groupId>
+        <artifactId>vavr</artifactId>
+        <version>0.10.5</version>
+    </dependency>
+
     <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_2.11</artifactId>
@@ -155,6 +162,13 @@
                  <artifactId>owlapi-osgidistribution</artifactId>
                  <version>4.2.8</version>
     </dependency>
+<!-- https://mvnrepository.com/artifact/junit/junit -->
+<dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.12</version>
+    <scope>test</scope>
+</dependency>
 
  <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 <dependency>
