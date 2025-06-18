@@ -23,8 +23,8 @@ public class NondeterministicChessProblem<GameState,GameAction> {
 	protected GameState initialState;
 	protected ActionsFunction<GameState, GameAction> actionsFn;
 	protected GoalTest<GameState> goalTest;
-	protected StepCostFunction<GameState, GameAction> stepCostFn;
-	protected ResultsFunction<GameState, GameAction> resultsFn;
+	protected NondeterimineStepCostFunction<GameState, GameAction> stepCostFn;
+	protected NonDetermineResultFunction<GameState, GameAction> resultsFn;
 
 	/**
 	 * Constructor

@@ -24,12 +24,26 @@ import no.games.chess.GamePiece;
 public class GameAction {
 	protected List<Sentence> pieceSentences = new ArrayList<Sentence>();
 	protected GamePiece<?> gamePiece;
+	protected GameState gameState; // The state to which this action belongs to
+	protected String[] notations;// of the form:  {startpos,piecename,endpos,piecetype}
 	
 	public GameAction(List<Sentence> pieceSentences, GamePiece<?> gamePiece) {
 		super();
 		this.pieceSentences = pieceSentences;
 		this.gamePiece = gamePiece;
 	}
+	
+	public GameAction(GamePiece<?> gamePiece, GameState gameState) {
+		super();
+		this.gamePiece = gamePiece;
+		this.gameState = gameState;
+	}
+
+	public GameAction(GamePiece<?> gamePiece) {
+		super();
+		this.gamePiece = gamePiece;
+	}
+
 	public List<Sentence> getPieceSentences() {
 		return pieceSentences;
 	}
@@ -42,6 +56,20 @@ public class GameAction {
 	public void setGamePiece(GamePiece<?> gamePiece) {
 		this.gamePiece = gamePiece;
 	}
+	
+	public String[] getNotations() {
+		return notations;
+	}
+
+	public void setNotations(String[] notations) {
+		this.notations = notations;
+	}
+
+	/**
+	 * getStates
+	 * This method returns a set of states as result of this action
+	 * @return
+	 */
 	public List<GameState> getStates(){
 		return null;
 	}

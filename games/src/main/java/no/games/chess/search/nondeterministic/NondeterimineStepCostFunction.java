@@ -15,7 +15,7 @@ import no.games.chess.planning.ChessPlannerAction;
  *
  * @param <GameState>
  */
-public class NondeteriminStepCostImpl<GameState> implements StepCostFunction<GameState,GameAction > {
+public class NondeterimineStepCostFunction<GameState,GameAction> implements StepCostFunction<GameState,GameAction > {
 
 	@Override
 	public double applyAsDouble(GameState s, GameAction a, GameState sDelta) {
