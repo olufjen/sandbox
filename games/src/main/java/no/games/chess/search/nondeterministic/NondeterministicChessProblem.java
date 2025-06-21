@@ -21,25 +21,27 @@ import java.util.List;
 public class NondeterministicChessProblem<GameState,GameAction> {
 
 	protected GameState initialState;
-	protected ActionsFunction<GameState, GameAction> actionsFn;
+	protected NonDetermineChessActionFunction<GameState, GameAction> actionsFn;
 	protected GoalTest<GameState> goalTest;
-	protected NondeterimineStepCostFunction<GameState, GameAction> stepCostFn;
+	protected StepCostFunction<GameState, GameAction> stepCostFn; //This is an interface !!??
 	protected NonDetermineResultFunction<GameState, GameAction> resultsFn;
 
 	/**
 	 * Constructor
+	 * No step cost function
 	 */
 	public NondeterministicChessProblem(GameState initialState,
-			ActionsFunction<GameState,GameAction> actionsFn, ResultsFunction<GameState,GameAction> resultsFn,
+			NonDetermineChessActionFunction<GameState,GameAction> actionsFn, NonDetermineResultFunction<GameState,GameAction> resultsFn,
 			GoalTest<GameState> goalTest) {
-		this(initialState, actionsFn, resultsFn, goalTest, (s, a, sPrimed) -> 1.0);
+		this(initialState, actionsFn, resultsFn, goalTest, (s, a, sPrimed) -> 1.0); // This is an implementation of the interface StepCostFunction
 	}
 
 	/**
 	 * Constructor
+	 * With defined step cost function
 	 */
 	public NondeterministicChessProblem(GameState initialState,
-			ActionsFunction<GameState,GameAction> actionsFn, ResultsFunction<GameState,GameAction> resultsFn,
+			NonDetermineChessActionFunction<GameState,GameAction> actionsFn, NonDetermineResultFunction<GameState,GameAction> resultsFn,
 			GoalTest<GameState> goalTest, StepCostFunction<GameState,GameAction> stepCostFn) {
 		this.initialState = initialState;
 		this.actionsFn = actionsFn;
@@ -47,6 +49,8 @@ public class NondeterministicChessProblem<GameState,GameAction> {
 		this.goalTest = goalTest;
 		this.stepCostFn = stepCostFn;
 	}
+
+
 
 
 	/**

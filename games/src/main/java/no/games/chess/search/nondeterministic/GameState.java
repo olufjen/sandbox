@@ -89,7 +89,7 @@ public class GameState {
 	/**
 	 * getActions
 	 * This method returns all GameActions applicable in this GameState
-	 * It is called by the Nondeterminitic action function
+	 * It is called by the Nondeterministic action function
 	 * @return
 	 */
 	public List<GameAction> getActions(){
@@ -97,5 +97,10 @@ public class GameState {
 	};
 	public boolean testEnd(GameAction action) {
 		return true;
+	}
+	public String toString() {
+		String theState = actionSchema.toString() + "\n" + gamePiece.toString() + "\n" + algebraicNotation ;
+		return theState;
+		
 	}
 }
