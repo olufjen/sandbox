@@ -14,8 +14,8 @@ import no.games.chess.GamePiece;
  * It also contains all FOL sentences belonging to this gamepiece.
  * The state of the game contains a set of chess actions and a generated set of action schemas.
  * Each action schema can be viewed as part of an individual state, and all the action schemas then represent a population of states.
- * This population is represented by a set of objects of this class.
- * Each such GameState also contains a set of predefined actions:
+ * This population is represented by a set of objects of this GameState class.
+ * Each such GameState also contains the set of predefined actions:
  * CAPTURE Position (any own piece to this position. This may involve several MOVEs)
  * MOVE piece to Position (any piece to Position)
  * ATTACK opponent Piece This may involve several MOVEs
@@ -23,6 +23,11 @@ import no.games.chess.GamePiece;
  * CAPTURE opponent Piece -This may involve several MOVEs
  * PROTECT own Piece - This may involve several MOVEs
  * PROTECT Position - This may involve several MOVEs
+ * CASTLING- normal exchange of king and castle.
+ * 
+ * These predefined actions represent the set of GameActions available to this game state.
+ * This set of game actions are created when the game state is created. (See constructor).
+ * The GamePiece belonging to this game state is used when creating these game actions. 
  * 
  * The choice of action is determined by an evaluation function. This evaluation function is calculating various features of the
  * population of GameState objects. (page 172 AIMA book).
@@ -43,19 +48,55 @@ public class GameState {
 	protected List<Sentence> pieceSentences = new ArrayList<Sentence>();
 	protected GamePiece<?> gamePiece;
 	protected ActionSchema actionSchema;
-	protected String[] notations;// of the form:  {startpos,piecename,endpos,piecetype}
+	protected String[] notations;// // These are keys for the moves in algebraic notation.
+	protected String[] liftedKey = new String[5]; // A String array used as a parameter set for a lifted action of the form:  {startpos,piecename,endpos,piecetype}
 	protected String algebraicNotation; // algebraic notation for possible move
 	protected GameAction action;
 	protected List<GameAction> actions;
+	protected ChessPercept thePerceptor;
+	enum Myaction{CAPTUREPOS,MOVE,ATTACK,CAPTUREPIECE,PROTECTPOS,PROTECTPIECE,CASTLING;} // The type of actions available to GameActions
 	
 	public GameState(GamePiece<?> gamePiece, ActionSchema actionSchema) {
 		super();
 		actions = new ArrayList<GameAction>();
 		this.gamePiece = gamePiece;
 		this.actionSchema = actionSchema;
-		action = new GameAction(gamePiece,this);
-		actions.add(action);
+		for (Myaction allaction:Myaction.values()) {
+			action = new GameAction(gamePiece,this,allaction);
+			actions.add(action);
+		}
 	}
+	
+	/**
+	 * This is the preferred contructor
+	 * @param pieceSentences - can be null
+	 * @param gamePiece  - The game piece involved in this state
+	 * @param actionSchema - can be null
+	 * @param thePerceptor
+	 */
+	public GameState(List<Sentence> pieceSentences, GamePiece<?> gamePiece, ActionSchema actionSchema,
+						ChessPercept thePerceptor) {
+		super();
+		actions = new ArrayList<GameAction>();
+		this.pieceSentences = pieceSentences;
+		this.gamePiece = gamePiece;
+		this.actionSchema = actionSchema;
+		this.thePerceptor = thePerceptor;
+		for (Myaction allaction:Myaction.values()) {
+			action = new GameAction(gamePiece,this,allaction);
+			actions.add(action);
+		}
+
+	}
+
+	public ChessPercept getThePerceptor() {
+		return thePerceptor;
+	}
+
+	public void setThePerceptor(ChessPercept thePerceptor) {
+		this.thePerceptor = thePerceptor;
+	}
+
 	public List<Sentence> getPieceSentences() {
 		return pieceSentences;
 	}
@@ -86,16 +127,44 @@ public class GameState {
 	public void setAction(GameAction action) {
 		this.action = action;
 	}
+	
+	public String[] getNotations() {
+		return notations;
+	}
+
+	public void setNotations(String[] notations) {
+		this.notations = notations;
+	}
+
+	public String[] getLiftedKey() {
+		return liftedKey;
+	}
+
+	public void setLiftedKey(String[] liftedKey) {
+		this.liftedKey = liftedKey;
+	}
+
 	/**
 	 * getActions
 	 * This method returns all GameActions applicable in this GameState
-	 * It is called by the Nondeterministic action function
+	 * It is called by the Nondeterministic action function through the .apply function
 	 * @return
 	 */
 	public List<GameAction> getActions(){
+/*
+ * Which actions are applicable in this state?		
+ */
 		return actions;
 	};
+	/**
+	 * testEnd
+	 * This is the method used for the ChessGoalTest function
+	 * Determines which action to be used
+	 * @param action
+	 * @return true if this is the goal state. This results in an empty plan
+	 */
 	public boolean testEnd(GameAction action) {
+	
 		return true;
 	}
 	public String toString() {

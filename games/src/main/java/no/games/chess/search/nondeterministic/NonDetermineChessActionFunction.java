@@ -10,19 +10,20 @@ import aima.core.search.framework.problem.ActionsFunction;
  * As described in the interface:
  * Given a particular state s, ACTIONS(s) returns the set of actions that can be
  * executed in s. We say that each of these actions is <b>applicable</b> in s.
- *
- * @param <S> The type used to represent states
+ * 
+ * @param <GameState> The type used to represent states
  * @param <A> The type of the actions to be used to navigate through the state space
  * @author oluf
  *
- * @param <GameState>
+ * @param <GameState> 
  * @param <GameAction>
  */
-public class NonDetermineChessActionFunction<GameState,GameAction> implements ActionsFunction<GameState, GameAction> {
+public class NonDetermineChessActionFunction implements ActionsFunction<GameState, GameAction> {
 
 	@Override
 	public List<GameAction> apply(GameState state) {
-		no.games.chess.search.nondeterministic.GameState localState = (no.games.chess.search.nondeterministic.GameState)state;
+		
+		 GameState localState = state;
 		return (List<GameAction>) localState.getActions();
 	}
 

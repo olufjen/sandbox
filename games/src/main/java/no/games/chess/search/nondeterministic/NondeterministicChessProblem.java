@@ -18,20 +18,20 @@ import java.util.List;
  * @author Ruediger Lunde
  * 
  */
-public class NondeterministicChessProblem<GameState,GameAction> {
+public class NondeterministicChessProblem {
 
 	protected GameState initialState;
-	protected NonDetermineChessActionFunction<GameState, GameAction> actionsFn;
+	protected NonDetermineChessActionFunction actionsFn; // Returns actions applicable in a given state
 	protected GoalTest<GameState> goalTest;
-	protected StepCostFunction<GameState, GameAction> stepCostFn; //This is an interface !!??
-	protected NonDetermineResultFunction<GameState, GameAction> resultsFn;
+	protected StepCostFunction<GameState, GameAction> stepCostFn; //This is an interface, so the constructor must contain an implementation 
+	protected NonDetermineResultFunction resultsFn;
 
 	/**
 	 * Constructor
 	 * No step cost function
 	 */
 	public NondeterministicChessProblem(GameState initialState,
-			NonDetermineChessActionFunction<GameState,GameAction> actionsFn, NonDetermineResultFunction<GameState,GameAction> resultsFn,
+			NonDetermineChessActionFunction actionsFn, NonDetermineResultFunction resultsFn,
 			GoalTest<GameState> goalTest) {
 		this(initialState, actionsFn, resultsFn, goalTest, (s, a, sPrimed) -> 1.0); // This is an implementation of the interface StepCostFunction
 	}
@@ -41,7 +41,7 @@ public class NondeterministicChessProblem<GameState,GameAction> {
 	 * With defined step cost function
 	 */
 	public NondeterministicChessProblem(GameState initialState,
-			NonDetermineChessActionFunction<GameState,GameAction> actionsFn, NonDetermineResultFunction<GameState,GameAction> resultsFn,
+			NonDetermineChessActionFunction actionsFn, NonDetermineResultFunction resultsFn,
 			GoalTest<GameState> goalTest, StepCostFunction<GameState,GameAction> stepCostFn) {
 		this.initialState = initialState;
 		this.actionsFn = actionsFn;
@@ -75,6 +75,7 @@ public class NondeterministicChessProblem<GameState,GameAction> {
 	 * Returns the description of the possible actions available to the agent.
 	 * The actionsFn is a functional interface that extends the Function interface (p. 53 Java 8)
 	 * The interface has one method: apply
+	 * It returns the list of actions applicable in the given state
 	 */
 	List<GameAction> getActions(GameState state) {
 		return actionsFn.apply(state);

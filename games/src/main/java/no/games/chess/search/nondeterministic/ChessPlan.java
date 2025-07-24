@@ -18,13 +18,19 @@ import java.util.List;
  * 
  * @author Ruediger Lunde
  * @author Andrew Brown
+ * 
+ * The OR node: The player chooses a move.
+ * All states but one remain the same.
+ * The outcome of the move is determined by the opponent's move. This is the AND node
+ * This opponent move produces a new set of states. All states but one remain the same.
+ * 
  */
-public class ChessPlan<GameState,GameAction> {
+public class ChessPlan {
 
 	private static final long serialVersionUID = 1L;
 
 	private List<GameAction> actionSteps = new LinkedList<>();
-	private List<IfStatement<GameState,GameAction>> ifStatements = new LinkedList<>();
+	private List<IfStatement> ifStatements = new LinkedList<>();
 
 
 	public boolean isEmpty() {
@@ -56,10 +62,10 @@ public class ChessPlan<GameState,GameAction> {
 	 * @param state The state to be matched.
 	 * @return A plan or null if no match was found.
 	 */
-	public ChessPlan<GameState,GameAction> getChessPlan(int step, GameState state) {
+	public ChessPlan getChessPlan(int step, GameState state) {
 		if (isActionStep(step) || step != actionSteps.size())
 			throw new IllegalArgumentException("Specified step is not conditional.");
-		for (IfStatement<GameState,GameAction> ifStatement : ifStatements) {
+		for (IfStatement ifStatement : ifStatements) {
 			if (ifStatement.testCondition(state))
 				return ifStatement.getChessPlan();
 		}
@@ -73,14 +79,14 @@ public class ChessPlan<GameState,GameAction> {
 	 *            the action to be prepended to this plan.
 	 * @return this plan with action prepended to it.
 	 */
-	public ChessPlan<GameState,GameAction> prepend(GameAction action) {
+	public ChessPlan prepend(GameAction action) {
 		actionSteps.add(0, action);
 		return this;
 	}
 
 	/** Adds an if-state-then-plan statement at the end of the plan. */
-	public void addIfStatement(GameState state, ChessPlan<GameState,GameAction> plan) {
-		ifStatements.add(new IfStatement<>(state, plan));
+	public void addIfStatement(GameState state, ChessPlan plan) {
+		ifStatements.add(new IfStatement(state, plan));
 	}
 
 	/**
@@ -98,7 +104,7 @@ public class ChessPlan<GameState,GameAction> {
 				s.append(", ");
 			s.append(step);
 		}
-		for (IfStatement<GameState,GameAction> ifStatement : ifStatements) {
+		for (IfStatement ifStatement : ifStatements) {
 			if (count++ > 0)
 				s.append(", ");
 			s.append(ifStatement);
@@ -113,12 +119,12 @@ public class ChessPlan<GameState,GameAction> {
 	 *
 	 * @author Ruediger Lunde
 	 */
-	private static class IfStatement<GameState,GameAction> {
+	private static class IfStatement {
 
 		GameState state;
-		ChessPlan<GameState,GameAction> plan;
+		ChessPlan plan;
 
-		IfStatement(GameState state, ChessPlan<GameState,GameAction> plan) {
+		IfStatement(GameState state, ChessPlan plan) {
 			this.state = state;
 			this.plan = plan;
 		}
@@ -127,7 +133,7 @@ public class ChessPlan<GameState,GameAction> {
 			return this.state.equals(state);
 		}
 
-		ChessPlan<GameState,GameAction> getChessPlan() {
+		ChessPlan getChessPlan() {
 			return plan;
 		}
 

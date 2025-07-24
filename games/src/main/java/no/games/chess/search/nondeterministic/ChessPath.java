@@ -11,7 +11,7 @@ import java.util.LinkedList;
  * @author Andrew Brown
  * @author Ruediger Lunde
  */
-public class ChessPath<GameState> extends LinkedList<GameState> {
+public class ChessPath extends LinkedList<GameState> {
 
 	/**
 	 * Create a new path containing this path's current states followed by the provided additional state.
@@ -21,8 +21,8 @@ public class ChessPath<GameState> extends LinkedList<GameState> {
 	 * @return a new Path that contains the passed in state along with this
 	 *         path's current states.
 	 */
-	public ChessPath<GameState> append(GameState state) {
-		ChessPath<GameState> appendedPath = new ChessPath<>();
+	public ChessPath append(GameState state) {
+		ChessPath appendedPath = new ChessPath();
 		appendedPath.addAll(this);
 		appendedPath.add(state);
 		return appendedPath;
@@ -36,8 +36,8 @@ public class ChessPath<GameState> extends LinkedList<GameState> {
 	 * @return a new Path that contains the passed in state along with this
 	 *         path's current states.
 	 */
-	public ChessPath<GameState> prepend(GameState state) {
-		ChessPath<GameState> prependedPath = new ChessPath<>();
+	public ChessPath prepend(GameState state) {
+		ChessPath prependedPath = new ChessPath();
 		prependedPath.add(state);
 		prependedPath.addAll(this);
 		return prependedPath;
