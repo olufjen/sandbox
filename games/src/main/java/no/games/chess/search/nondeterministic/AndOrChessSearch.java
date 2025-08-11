@@ -85,12 +85,12 @@ public class AndOrChessSearch {
 		if (state != null) {
 			plan = orSearch(problem.getInitialState(), problem, new ChessPath());
 			return plan != null ? Optional.of(plan) : Optional.empty();
-		}else { // If there is no initial state return all available states.
-			List<GameState> gameStates = problem.getResults(state, null);
-			andSearch(gameStates, problem, new ChessPath());
-			
+		}else { // If there is no initial state return a plan checking all available states.
+			List<GameState> gameStates = problem.getResults(state, null);//getResults returns all available states when action is null
+			plan = andSearch(gameStates, problem, new ChessPath()); // changed from: andSearch(gameStates, problem, new ChessPath())
+			return plan != null ? Optional.of(plan) : Optional.empty(); // So this would always return null plan !!
 		}
-		return null;
+//		return null;
 	}
 
 	/**
@@ -116,17 +116,18 @@ public class AndOrChessSearch {
 		// do metrics
 		expandedNodes++;
 		// if problem.GOAL-TEST(state) then return the empty plan
-		if (problem.testGoal(state))
+		if (problem.testGoal(state)) // calls the testEnd method of the state
 			return new ChessPlan();
 
 		// if state is on path then return failure
 		if (path.contains(state))
 			return null;
 
-		// for each action in problem.ACTIONS(state) do - Get the set of gamestates from the result function for this action
+		// for each action in problem.ACTIONS(state) do - Get the set of game actions from the result function for this action
 		for (GameAction action : problem.getActions(state)) { // Returns actions applicable in this state
 			// plan <- AND-SEARCH(RESULTS(state, action), problem, [state|path])
-			ChessPlan plan = andSearch(problem.getResults(state, action), problem, path.prepend(state)); //getResults returns the state as a result of the action
+			ChessPlan plan = andSearch(problem.getResults(state, action), problem, path.prepend(state)); //getResults returns the state as a result of the
+			//   -- applicable  action
 			// if plan != failure then return [action|plan]
 			if (plan != null)
 				return plan.prepend(action);

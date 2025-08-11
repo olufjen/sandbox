@@ -158,10 +158,12 @@ public class GameState {
 	};
 	/**
 	 * testEnd
-	 * This is the method used for the ChessGoalTest function
-	 * Determines which action to be used
-	 * @param action
-	 * @return true if this is the goal state. This results in an empty plan
+	 * This is the method used by the ChessGoalTest functional interface 
+	 * the testGoal method
+	 * A Game Action may return a set of GameStates, each of these states have a value.
+	 * 
+	 * @param action Based on this action, is this the goal state?
+	 * @return true if this is the goal state. This results in an empty plan in the search tree
 	 */
 	public boolean testEnd(GameAction action) {
 	

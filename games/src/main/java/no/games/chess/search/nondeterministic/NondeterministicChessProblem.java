@@ -65,6 +65,7 @@ public class NondeterministicChessProblem {
 	/**
 	 * Returns <code>true</code> if the given state is a goal state.
 	 * The goalTest interface is a predicate functional interface
+	 * It calls the state's testEnd method
 	 * @return <code>true</code> if the given state is a goal state.
 	 */
 	public boolean testGoal(GameState state) {

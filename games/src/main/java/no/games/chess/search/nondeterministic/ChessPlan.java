@@ -19,10 +19,12 @@ import java.util.List;
  * @author Ruediger Lunde
  * @author Andrew Brown
  * 
- * The OR node: The player chooses a move.
+ * The OR node: The player performs a move.
  * All states but one remain the same.
  * The outcome of the move is determined by the opponent's move. This is the AND node
  * This opponent move produces a new set of states. All states but one remain the same.
+ * The plan consists of a linked list of if statements (if game state x) and a linked list of game actions: (then game action y)
+ * 
  * 
  */
 public class ChessPlan {

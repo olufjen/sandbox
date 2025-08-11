@@ -78,7 +78,7 @@ public class NonDetermineResultFunction {
 			return action.getStates();
 		}
 		
-		return gameStates;
+//		return gameStates;
 	}
 
 

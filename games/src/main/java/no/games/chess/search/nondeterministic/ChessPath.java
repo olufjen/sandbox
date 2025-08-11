@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 /**
  * ChessPath
+ * The chess path is a linked list of game states
  * This class is the chess version of the Path class as described:
  * Represents the path the agent travels through the AND-OR tree (see figure
  * 4.10, page 135, AIMA3e).
