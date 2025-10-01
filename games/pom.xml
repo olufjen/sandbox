@@ -33,7 +33,9 @@
 </build>
     
         <!-- Properties files  jena version prev: 3.0.0 olj 09.08.18 3.8.0 creates problems???!!  -->
-    <!-- Properties files -->
+    <!-- Properties files  -->
+
+
     <properties>
 
     <swrlapi.version>2.0.5</swrlapi.version>
@@ -48,11 +50,11 @@
         <org.springframework.version>3.1.1.RELEASE</org.springframework.version>
         <springwebflow.version>2.3.2.RELEASE</springwebflow.version>
          <springweboxm.version>3.1.1.RELEASE</springweboxm.version>
-        <restlet.version>2.2-M5</restlet.version>
+        <restlet.version>3.0-M1</restlet.version>  <!-- New restlet version -->
  <!--         <basedirx>C:\Users\oluf\.m2\repository</basedirx>  -->
     </properties>
 
-    
+
  <repositories>
  
     <repository>
@@ -69,10 +71,12 @@
      </repository>
      
      <!-- Repository for Restlet -->
+         <!-- Repository for Restlet endret 22.09.25 -->
      <repository>
      	<id>maven-restlet</id>
      	<name>Public online Restlet repository</name>
-     	<url>http://maven.restlet.org/</url>
+    <!-- 	<url>http://maven.restlet.org/</url> -->
+    <url>https://maven.restlet.talend.com/</url>
      	<snapshots>
         <enabled>true</enabled>
         <updatePolicy>never</updatePolicy>
@@ -182,6 +186,41 @@
     <artifactId>slf4j-simple</artifactId>
     <version>1.8.0-beta2</version>
     <scope>test</scope>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-controls  01.10.25-->
+<dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-controls</artifactId>
+    <version>26-ea+7</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-fxml 01.10.25  -->
+<dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-fxml</artifactId>
+    <version>26-ea+7</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-base 01.10.25 -->
+<dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-base</artifactId>
+    <version>26-ea+7</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-graphics 01.10.25 -->
+<dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-graphics</artifactId>
+    <version>26-ea+7</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing -->
+<dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-swing</artifactId>
+    <version>26-ea+7</version>
+</dependency><!-- https://mvnrepository.com/artifact/org.openjfx/javafx-swing 01.10.25 -->
+<dependency>
+    <groupId>org.openjfx</groupId>
+    <artifactId>javafx-swing</artifactId>
+    <version>26-ea+7</version>
 </dependency>
 <dependency>
         <groupId>org.restlet.jee</groupId>
