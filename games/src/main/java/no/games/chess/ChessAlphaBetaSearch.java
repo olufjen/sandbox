@@ -34,16 +34,17 @@ public class ChessAlphaBetaSearch extends IterativeDeepeningAlphaBetaSearch<Ches
 	private ChessPlayer<GamePiece, PieceMove> player;
 	private ChessState<GameBoard> xstate;
 	private ChessAction<?, ?, ?, GamePiece, ?> action;
-	private String outputFileName = "C:\\Users\\bruker\\Google Drive\\privat\\ontologies\\analysis\\logs.txt";
+	private String outputFileName = "logs.txt";
 	private PrintWriter writer = null;
 	private FileWriter fw = null;
 	private int timecount = 0;
-	
+    private String fileCatalog = "G:\\Min disk\\privat\\ontologies\\analysis\\";
 	 private Timer timer;
 	public ChessAlphaBetaSearch(Game<ChessState<GameBoard>, ChessAction<?, ?, ?, GamePiece<?>, ?>, ChessPlayer<GamePiece, PieceMove>> game, double utilMin, double utilMax,
 			int time) {
 	
 		super(game, utilMin, utilMax, time);
+		outputFileName = fileCatalog + outputFileName; 
 		this.timecount = time;
 	      this.timer = new Timer(time);
 			try {
