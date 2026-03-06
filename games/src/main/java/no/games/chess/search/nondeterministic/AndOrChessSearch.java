@@ -86,9 +86,7 @@ public class AndOrChessSearch {
 			plan = orSearch(problem.getInitialState(), problem, new ChessPath());
 			return plan != null ? Optional.of(plan) : Optional.empty();
 		}else { // If there is no initial state return a plan checking all available states.
-			List<GameState> gameStates = problem.getResults(state, null);//getResults returns all available states when action is null
-			plan = andSearch(gameStates, problem, new ChessPath()); // changed from: andSearch(gameStates, problem, new ChessPath())
-			return plan != null ? Optional.of(plan) : Optional.empty(); // So this would always return null plan !!
+			return  Optional.empty();
 		}
 //		return null;
 	}
@@ -153,7 +151,7 @@ public class AndOrChessSearch {
 	 * </code>
 	 * </pre>
 	 * 
-	 * 
+	 * THe AND search represent the opponent possible moves
 	 * 
 	 * @param states
 	 * @param problem

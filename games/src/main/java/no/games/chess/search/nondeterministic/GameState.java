@@ -9,13 +9,10 @@ import no.games.chess.GamePiece;
 
 /**
  * GameState 
- * This class contains an ActionSchema. This Action Schema is linked to its AgamePiece.
- * The action schema is available for the game piece.
- * It also contains all FOL sentences belonging to this gamepiece.
+ *  Revised 26.01.26:
+ * A GameState contains all FOL sentences representing the state of the game.
  * The state of the game contains a set of chess actions and a generated set of action schemas.
- * Each action schema can be viewed as part of an individual state, and all the action schemas then represent a population of states.
- * This population is represented by a set of objects of this GameState class.
- * Each such GameState also contains the set of predefined actions:
+ * A GameState also contains the set of predefined actions:
  * CAPTURE Position (any own piece to this position. This may involve several MOVEs)
  * MOVE piece to Position (any piece to Position)
  * ATTACK opponent Piece This may involve several MOVEs
@@ -26,9 +23,6 @@ import no.games.chess.GamePiece;
  * CASTLING- normal exchange of king and castle.
  * 
  * These predefined actions represent the set of GameActions available to this game state.
- * This set of game actions are created when the game state is created. (See constructor).
- * The GamePiece belonging to this game state is used when creating these game actions. 
- * 
  * The choice of action is determined by an evaluation function. This evaluation function is calculating various features of the
  * population of GameState objects. (page 172 AIMA book).
  * (See also section on harmony in chess positions.)
@@ -46,7 +40,6 @@ import no.games.chess.GamePiece;
 public class GameState {
 
 	protected List<Sentence> pieceSentences = new ArrayList<Sentence>();
-	protected GamePiece<?> gamePiece;
 	protected ActionSchema actionSchema;
 	protected String[] notations;// // These are keys for the moves in algebraic notation.
 	protected String[] liftedKey = new String[5]; // A String array used as a parameter set for a lifted action of the form:  {startpos,piecename,endpos,piecetype}
@@ -54,39 +47,57 @@ public class GameState {
 	protected GameAction action;
 	protected List<GameAction> actions;
 	protected ChessPercept thePerceptor;
-	enum Myaction{CAPTUREPOS,MOVE,ATTACK,CAPTUREPIECE,PROTECTPOS,PROTECTPIECE,CASTLING;} // The type of actions available to GameActions
+	protected List<ActionSchema> actionSchemas;
 	
-	public GameState(GamePiece<?> gamePiece, ActionSchema actionSchema) {
+	public GameState() {
 		super();
-		actions = new ArrayList<GameAction>();
-		this.gamePiece = gamePiece;
-		this.actionSchema = actionSchema;
-		for (Myaction allaction:Myaction.values()) {
-			action = new GameAction(gamePiece,this,allaction);
-			actions.add(action);
-		}
+		// TODO Auto-generated constructor stub
 	}
-	
+
 	/**
-	 * This is the preferred contructor
 	 * @param pieceSentences - can be null
-	 * @param gamePiece  - The game piece involved in this state
-	 * @param actionSchema - can be null
 	 * @param thePerceptor
 	 */
-	public GameState(List<Sentence> pieceSentences, GamePiece<?> gamePiece, ActionSchema actionSchema,
+	public GameState(List<Sentence> pieceSentences, 
 						ChessPercept thePerceptor) {
 		super();
 		actions = new ArrayList<GameAction>();
 		this.pieceSentences = pieceSentences;
-		this.gamePiece = gamePiece;
-		this.actionSchema = actionSchema;
 		this.thePerceptor = thePerceptor;
-		for (Myaction allaction:Myaction.values()) {
-			action = new GameAction(gamePiece,this,allaction);
-			actions.add(action);
-		}
+		actionSchemas = new ArrayList<ActionSchema>();
 
+	}
+	
+
+	/**
+	 * THe preferred constructor
+	 * @param thePerceptor
+	 * @param actionSchemas
+	 */
+	public GameState(ChessPercept thePerceptor, List<ActionSchema> actionSchemas) {
+		super();
+		this.thePerceptor = thePerceptor;
+		this.actionSchemas = actionSchemas;
+	}
+
+	public ActionSchema getActionSchema() {
+		return actionSchema;
+	}
+
+	public void setActionSchema(ActionSchema actionSchema) {
+		this.actionSchema = actionSchema;
+	}
+
+	public List<ActionSchema> getActionSchemas() {
+		return actionSchemas;
+	}
+
+	public void setActionSchemas(List<ActionSchema> actionSchemas) {
+		this.actionSchemas = actionSchemas;
+	}
+
+	public void setActions(List<GameAction> actions) {
+		this.actions = actions;
 	}
 
 	public ChessPercept getThePerceptor() {
@@ -102,18 +113,6 @@ public class GameState {
 	}
 	public void setPieceSentences(List<Sentence> pieceSentences) {
 		this.pieceSentences = pieceSentences;
-	}
-	public GamePiece<?> getGamePiece() {
-		return gamePiece;
-	}
-	public void setGamePiece(GamePiece<?> gamePiece) {
-		this.gamePiece = gamePiece;
-	}
-	public ActionSchema getActionSchema() {
-		return actionSchema;
-	}
-	public void setActionSchema(ActionSchema actionSchema) {
-		this.actionSchema = actionSchema;
 	}
 	public String getAlgebraicNotation() {
 		return algebraicNotation;
@@ -170,7 +169,7 @@ public class GameState {
 		return true;
 	}
 	public String toString() {
-		String theState = actionSchema.toString() + "\n" + gamePiece.toString() + "\n" + algebraicNotation ;
+		String theState = "No State"; //To be changed
 		return theState;
 		
 	}

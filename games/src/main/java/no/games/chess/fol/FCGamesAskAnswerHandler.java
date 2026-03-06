@@ -15,6 +15,16 @@ import aima.core.logic.fol.kb.data.Literal;
 import aima.core.logic.fol.parsing.ast.Term;
 import aima.core.logic.fol.parsing.ast.Variable;
 
+/**
+ * FCGamesAskAnswerHandler
+ * Dette er en kopi av FCAskAnswerHandler implements InferenceResult
+ * som er en intern klasse til FOLFCAsk
+ * This is a copy of FCAskAnswerHandler implements InferenceResult
+ * It is a result of interrogating the knowledge base using forward chaining
+
+
+ * 
+ */
 public class FCGamesAskAnswerHandler implements InferenceResult {
 
 	private ProofStep stepFinal = null;

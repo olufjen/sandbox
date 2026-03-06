@@ -16,24 +16,30 @@ import aima.core.search.nondeterministic.ResultsFunction;
 public class NonDetermineResultFunction {
 	private GameState state;
 	private GameAction action;
-	private List<GameState> gameStates; // The population of gamestates
-	
-
-
 
 
 	/**
 	 * NonDetermineResultFunction
-	 * THe constructor of the NonDetermineResultFunction
+	 * The constructor of the NonDetermineResultFunction
+	 * @param state
+	*/
+
+	public NonDetermineResultFunction(GameState state) {
+		super();
+		this.state = state;
+	}
+
+
+	/**
+	 * NonDetermineResultFunction
+	 * The constructor of the NonDetermineResultFunction
 	 * @param state
 	 * @param action
-	 * @param gameStates The population of game states
 	 */
-	public NonDetermineResultFunction(GameState state, GameAction action, List<GameState> gameStates) {
+	public NonDetermineResultFunction(GameState state, GameAction action ) {
 		super();
 		this.state = state;
 		this.action = action;
-		this.gameStates = gameStates;
 		
 	}
 
@@ -69,16 +75,7 @@ public class NonDetermineResultFunction {
  * What gamestates are the result of this action?
  * The gameaction needs a method to return a set of states as a result of this action		
  */
-		if (state == null) {
-			return gameStates;
-		}
-		if (action == null) {
-			return gameStates;
-		}else {
-			return action.getStates();
-		}
-		
-//		return gameStates;
+		return action.performAcion();
 	}
 
 

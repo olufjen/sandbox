@@ -4,6 +4,7 @@ import aima.core.search.framework.problem.ActionsFunction;
 import aima.core.search.framework.problem.GoalTest;
 import aima.core.search.framework.problem.StepCostFunction;
 import aima.core.search.nondeterministic.ResultsFunction;
+import no.games.chess.search.ChessGoalTest;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class NondeterministicChessProblem {
 
 	protected GameState initialState;
 	protected NonDetermineChessActionFunction actionsFn; // Returns actions applicable in a given state
-	protected GoalTest<GameState> goalTest;
+	protected ChessGoalTest<GameState> goalTest;
 	protected StepCostFunction<GameState, GameAction> stepCostFn; //This is an interface, so the constructor must contain an implementation 
 	protected NonDetermineResultFunction resultsFn;
 
@@ -33,7 +34,8 @@ public class NondeterministicChessProblem {
 	public NondeterministicChessProblem(GameState initialState,
 			NonDetermineChessActionFunction actionsFn, NonDetermineResultFunction resultsFn,
 			GoalTest<GameState> goalTest) {
-		this(initialState, actionsFn, resultsFn, goalTest, (s, a, sPrimed) -> 1.0); // This is an implementation of the interface StepCostFunction
+		
+		this(initialState, actionsFn, resultsFn,goalTest,  (s, a, sPrimed) -> 1.0); // This is an implementation of the interface StepCostFunction
 	}
 
 	/**
@@ -46,9 +48,11 @@ public class NondeterministicChessProblem {
 		this.initialState = initialState;
 		this.actionsFn = actionsFn;
 		this.resultsFn = resultsFn;
-		this.goalTest = goalTest;
+		this.goalTest = (ChessGoalTest) goalTest;
 		this.stepCostFn = stepCostFn;
 	}
+
+
 
 
 

@@ -5,7 +5,6 @@ import java.util.List;
 
 import aima.core.logic.fol.parsing.ast.Sentence;
 import no.games.chess.GamePiece;
-import no.games.chess.search.nondeterministic.GameState.Myaction;
 
 /**
  * GameAction
@@ -26,10 +25,9 @@ import no.games.chess.search.nondeterministic.GameState.Myaction;
  */
 public class GameAction {
 	protected List<Sentence> pieceSentences = new ArrayList<Sentence>();
-	protected GamePiece<?> gamePiece;
+	protected GamePiece<?> gamePiece; // AgamePiece inherits AbstractGamePiece which implements GamePiece
 	protected GameState gameState; // The state to which this action belongs to
 	protected String[] notations;// of the form:  {startpos,piecename,endpos,piecetype}
-	private no.games.chess.search.nondeterministic.GameState.Myaction actionType;
 	
 	public GameAction(List<Sentence> pieceSentences, GamePiece<?> gamePiece) {
 		super();
@@ -47,29 +45,6 @@ public class GameAction {
 	public GameAction(GamePiece<?> gamePiece) {
 		super();
 		this.gamePiece = gamePiece;
-	}
-
-	/**
-	 * This is the preferred constructor
-	 * @param gamePiece
-	 * @param gameState
-	 * @param action The action type
-	 */
-	public GameAction(GamePiece<?> gamePiece, GameState gameState, GameState.Myaction action) {
-		super();
-		this.gamePiece = gamePiece;
-		this.gameState = gameState;
-		this.actionType = action; // The action type
-	}
-
-
-
-	public no.games.chess.search.nondeterministic.GameState.Myaction getActionType() {
-		return actionType;
-	}
-
-	public void setActionType(no.games.chess.search.nondeterministic.GameState.Myaction actionType) {
-		this.actionType = actionType;
 	}
 
 	public List<Sentence> getPieceSentences() {
@@ -99,6 +74,9 @@ public class GameAction {
 	 * @return A list of gamestates
 	 */
 	public List<GameState> getStates(){
+		return null;
+	}
+	public List<GameState> performAcion() {
 		return null;
 	}
 }

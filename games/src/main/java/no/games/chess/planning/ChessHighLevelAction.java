@@ -5,7 +5,7 @@ import aima.core.logic.fol.parsing.ast.Term;
 import aima.core.logic.planning.ActionSchema;
 import java.util.List;
 /**
- * This class is a specialized version of the
+ * This class is a specialized version of the AIMA HighLevelAction:
  * Artificial Intelligence A Modern Approach (3rd Edition): Figure 11.4, page
  * 409.<br>
  * <p>

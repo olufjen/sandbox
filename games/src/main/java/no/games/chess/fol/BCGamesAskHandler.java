@@ -12,6 +12,14 @@ import aima.core.logic.fol.parsing.ast.Term;
 import aima.core.logic.fol.parsing.ast.Variable;
 import no.games.chess.fol.BCProof;
 
+/**
+ * BCGamesAskHandler
+ * Dette er en kopi av FBCASKHandler implements InferenceResult
+ * som er en intern klasse til FOLBCask
+ * This is a copy of FBCASKHandler implements InferenceResult
+ * It is a result of interrogating the knowledge base using backward chaining
+ * 
+ */
 public class BCGamesAskHandler implements InferenceResult {
 
 	private ProofStep stepFinal = null;
