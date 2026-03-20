@@ -23,7 +23,7 @@ public class NondeterministicChessProblem {
 
 	protected GameState initialState;
 	protected NonDetermineChessActionFunction actionsFn; // Returns actions applicable in a given state
-	protected ChessGoalTest<GameState> goalTest;
+	protected ChessNonDeterGoalTest<GameState> goalTest;
 	protected StepCostFunction<GameState, GameAction> stepCostFn; //This is an interface, so the constructor must contain an implementation 
 	protected NonDetermineResultFunction resultsFn;
 
@@ -33,7 +33,7 @@ public class NondeterministicChessProblem {
 	 */
 	public NondeterministicChessProblem(GameState initialState,
 			NonDetermineChessActionFunction actionsFn, NonDetermineResultFunction resultsFn,
-			GoalTest<GameState> goalTest) {
+			ChessNonDeterGoalTest<GameState> goalTest) {
 		
 		this(initialState, actionsFn, resultsFn,goalTest,  (s, a, sPrimed) -> 1.0); // This is an implementation of the interface StepCostFunction
 	}
@@ -44,11 +44,11 @@ public class NondeterministicChessProblem {
 	 */
 	public NondeterministicChessProblem(GameState initialState,
 			NonDetermineChessActionFunction actionsFn, NonDetermineResultFunction resultsFn,
-			GoalTest<GameState> goalTest, StepCostFunction<GameState,GameAction> stepCostFn) {
+			ChessNonDeterGoalTest<GameState> goalTest, StepCostFunction<GameState,GameAction> stepCostFn) {
 		this.initialState = initialState;
 		this.actionsFn = actionsFn;
 		this.resultsFn = resultsFn;
-		this.goalTest = (ChessGoalTest) goalTest;
+		this.goalTest = goalTest;
 		this.stepCostFn = stepCostFn;
 	}
 
@@ -88,7 +88,9 @@ public class NondeterministicChessProblem {
 
 	/**
 	 * Return the description of what each action does.
+	 * It is called from the orSearch method of the AndOrChessSearch
 	 * The resultsFn is an ordinary interface with one method: results(state,action)
+	 * The resultfunction calls the performAction method of the GameAction
 	 * @return the description of what each action does - a list of possible outcome states.
 	 */
 	public List<GameState> getResults(GameState state, GameAction action) {
