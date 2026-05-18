@@ -18,7 +18,7 @@ public class ChessPath extends LinkedList<GameState> {
 	 * Create a new path containing this path's current states followed by the provided additional state.
 	 *
 	 * @param state
-	 *            the state to be prepended.
+	 *            the state to be appended.
 	 * @return a new Path that contains the passed in state along with this
 	 *         path's current states.
 	 */

@@ -35,6 +35,21 @@ public class ChessPlan {
 	private List<IfStatement> ifStatements = new LinkedList<>();
 
 
+	public ChessPlan() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * Constructor for a Plan with an action step
+	 * @since 25.3.26
+	 * @param action
+	 */
+	public ChessPlan(GameAction action) {
+		super();
+		actionSteps.add(action);
+	}
+
 	public boolean isEmpty() {
 		return actionSteps.isEmpty() && ifStatements.isEmpty();
 	}

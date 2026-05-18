@@ -80,7 +80,7 @@ public class NondeterministicChessProblem {
 	 * Returns the description of the possible actions available to the agent.
 	 * The actionsFn is a functional interface that extends the Function interface (p. 53 Java 8)
 	 * The interface has one method: apply
-	 * It returns the list of actions applicable in the given state
+	 * It returns the list of actions applicable in the given state for the player (see the getRelevantActions in the GroundGameState)
 	 */
 	List<GameAction> getActions(GameState state) {
 		return actionsFn.apply(state);

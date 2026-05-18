@@ -75,7 +75,7 @@ public class NonDetermineResultFunction {
  * What gamestates are the result of this action?
  * The gameaction needs a method to return a set of states as a result of this action		
  */
-		return action.performAcion();
+		return action.performAction();
 	}
 
 

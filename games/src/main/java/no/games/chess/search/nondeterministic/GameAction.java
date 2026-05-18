@@ -20,10 +20,11 @@ import no.games.chess.GamePiece;
  * CASTLING- normal exchange of king and castle.
  * All action types must be broken down into separate steps of the MOVE action type.
  * Each such action is performed by a chess piece.
+ * @since 25.3.25 THis class is set abstract
  * @author oluf
  *
  */
-public class GameAction {
+public abstract class GameAction{
 	protected List<Sentence> pieceSentences = new ArrayList<Sentence>();
 	protected GamePiece<?> gamePiece; // AgamePiece inherits AbstractGamePiece which implements GamePiece
 	protected GameState gameState; // The state to which this action belongs to
@@ -76,7 +77,7 @@ public class GameAction {
 	public List<GameState> getStates(){
 		return null;
 	}
-	public List<GameState> performAcion() {
-		return null;
-	}
+	public abstract  List<GameState> performAction();
+
+
 }

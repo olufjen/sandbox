@@ -33,11 +33,12 @@ import no.games.chess.GamePiece;
  * Then the generated action schema is a lifted action schema or a proposed chess move represented in algebraic notation or
  * as a string array of the form:
  *  {startpos,piecename,endpos,piecetype} 
+ * @since 25.3.25 THis class is set abstract
 
  * @author ojn
  *
  */
-public class GameState {
+public abstract class GameState {
 
 	protected List<Sentence> pieceSentences = new ArrayList<Sentence>();
 	protected ActionSchema actionSchema;
@@ -48,6 +49,8 @@ public class GameState {
 	protected List<GameAction> actions;
 	protected ChessPercept thePerceptor;
 	protected List<ActionSchema> actionSchemas;
+	protected String gamestateId;
+	protected boolean goalState = false;
 	
 	public GameState() {
 		super();
@@ -61,7 +64,6 @@ public class GameState {
 	public GameState(List<Sentence> pieceSentences, 
 						ChessPercept thePerceptor) {
 		super();
-		actions = new ArrayList<GameAction>();
 		this.pieceSentences = pieceSentences;
 		this.thePerceptor = thePerceptor;
 		actionSchemas = new ArrayList<ActionSchema>();
@@ -80,6 +82,22 @@ public class GameState {
 		this.actionSchemas = actionSchemas;
 	}
 
+	public boolean isGoalState() {
+		return goalState;
+	}
+
+	public void setGoalState(boolean goalState) {
+		this.goalState = goalState;
+	}
+
+	public String getGamestateId() {
+		return gamestateId;
+	}
+
+	public void setGamestateId(String gamestateId) {
+		this.gamestateId = gamestateId;
+	}
+
 	public ActionSchema getActionSchema() {
 		return actionSchema;
 	}
@@ -96,9 +114,6 @@ public class GameState {
 		this.actionSchemas = actionSchemas;
 	}
 
-	public void setActions(List<GameAction> actions) {
-		this.actions = actions;
-	}
 
 	public ChessPercept getThePerceptor() {
 		return thePerceptor;
@@ -149,12 +164,12 @@ public class GameState {
 	 * It is called by the Nondeterministic action function through the .apply function
 	 * @return
 	 */
-	public List<GameAction> getActions(){
-/*
- * Which actions are applicable in this state?		
- */
-		return actions;
-	};
+	public abstract List<GameAction> getActions();;
+	
+	public void setActions(List<GameAction> actions) {
+		this.actions = actions;
+	}
+
 	/**
 	 * testEnd
 	 * This is the method used by the ChessGoalTest functional interface 
@@ -164,12 +179,10 @@ public class GameState {
 	 * @param action Based on this action, is this the goal state?
 	 * @return true if this is the goal state. This results in an empty plan in the search tree
 	 */
-	public boolean testEnd(GameAction action) {
+	public abstract boolean testEnd(GameAction action);
 	
-		return true;
-	}
 	public String toString() {
-		String theState = "No State"; //To be changed
+		String theState = gamestateId; //To be changed
 		return theState;
 		
 	}

@@ -83,7 +83,7 @@ public class AndOrChessSearch {
 		// OR-SEARCH(problem.INITIAL-STATE, problem, [])
 		ChessPlan plan = null;
 		if (state != null) {
-			plan = orSearch(problem.getInitialState(), problem, new ChessPath());
+			plan = orSearch(problem.getInitialState(), problem, new ChessPath()); // My move The chesspath is an empty linkedlist
 			return plan != null ? Optional.of(plan) : Optional.empty();
 		}else { // If there is no initial state return a plan checking all available states.
 			return  Optional.empty();
@@ -114,18 +114,19 @@ public class AndOrChessSearch {
 		// do metrics
 		expandedNodes++;
 		// if problem.GOAL-TEST(state) then return the empty plan
-		if (problem.testGoal(state)) // calls the testEnd method of the state
-			return new ChessPlan();
+		if (problem.testGoal(state)) // calls the testEnd method of the state returns true if this is the goal state
+			return new ChessPlan(state.getAction());
 
-		// if state is on path then return failure
+		// if state is on path then return failure OBS !!! 7.04.26
 		if (path.contains(state))
 			return null;
 
 		// for each action in problem.ACTIONS(state) do - Get the set of game actions from the result function for this action
-		for (GameAction action : problem.getActions(state)) { // Returns actions applicable in this state
+		// OJN: For all relevant actions for the player DO:
+		for (GameAction action : problem.getActions(state)) { // getActions Returns actions applicable in this state (see the getRelevantActions in the GroundGameState)
 			// plan <- AND-SEARCH(RESULTS(state, action), problem, [state|path])
-			ChessPlan plan = andSearch(problem.getResults(state, action), problem, path.prepend(state)); //getResults returns the state as a result of the
-			//   -- applicable  action
+			ChessPlan plan = andSearch(problem.getResults(state, action), problem, path.prepend(state)); //getResults returns the state as a result of the action. Calls the performAction method of GroundGameAction 
+			//   -- applicable  action andSearch is the opponent move
 			// if plan != failure then return [action|plan]
 			if (plan != null)
 				return plan.prepend(action);
@@ -151,7 +152,8 @@ public class AndOrChessSearch {
 	 * </code>
 	 * </pre>
 	 * 
-	 * THe AND search represent the opponent possible moves
+	 * The AND search represent the opponent possible moves
+	 * The result function may return an empty list of states !! ??
 	 * 
 	 * @param states
 	 * @param problem
@@ -161,14 +163,20 @@ public class AndOrChessSearch {
 	public ChessPlan andSearch(List<GameState> states, NondeterministicChessProblem problem, ChessPath path) {
 		// do metrics, setup
 		expandedNodes++;
-		List<ChessPlan> subPlans = new ArrayList<>(states.size());
+		List<ChessPlan> subPlans = new ArrayList<>(states.size()); // What if the resultfunction returns an empty list of states?
 		// for each s_i in states do - returns a plan as a result of an action by the agent (the player).
 		for (GameState state : states) {
 			// plan_i <- OR-SEARCH(s_i, problem, path)
 			ChessPlan subPlan = orSearch(state, problem, path);
-			subPlans.add(subPlan);
+	//		subPlans.add(subPlan);
+			if (subPlan != null) {
+				subPlans.add(subPlan); // Returns null if state is on path ??? !!! OJN 7.04.26
+										// Changed: If state is not on path (subPlan is not null) Add subPlan to plans
+			}
 			if (subPlan == null)
-				return null;
+				break; // OrSearch returns null if state is on path, then break the search OJN 9.04.26
+			if (state.isGoalState())
+				break;  // This is true if orSearch has found a goal state
 		}
 		if (subPlans.size() == 1) {
 			// no if is needed in this case...
