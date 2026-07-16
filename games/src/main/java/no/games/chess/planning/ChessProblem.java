@@ -66,6 +66,10 @@ public class ChessProblem {
     public State getGoalState() {
         return goalState;
     }
+    public List<ActionSchema> getAllActionSchemas(){
+    	List<ActionSchema> myList = new ArrayList<>(actionSchemas);
+    	return myList;
+    }
 
     public List<Constant> determinConstants(List<Literal>literals) {
     	List<Constant> constants = new ArrayList<>();
