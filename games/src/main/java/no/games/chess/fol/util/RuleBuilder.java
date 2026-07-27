@@ -112,6 +112,10 @@ public class RuleBuilder {
         }
         return new Predicate(name, termList);
     }
+    
+    /**
+     * Hovedmetode for å parse strenger til AIMA Sentence-objekter.
+     */
     public Sentence parseToPredicate(String input) {
         String trimmed = input.trim();
 
@@ -121,33 +125,110 @@ public class RuleBuilder {
             return new NotSentence(parseToPredicate(inner));
         }
 
-        // 2. Håndter likhet/ulikhet (f.eks. s1==s2)
+        // 2. Håndter likhet (==)
         if (trimmed.contains("==")) {
             String[] parts = trimmed.split("==");
-            Term t1 = Character.isUpperCase(parts[0].trim().charAt(0)) ? new Constant(parts[0].trim()) : new Variable(parts[0].trim());
-            Term t2 = Character.isUpperCase(parts[1].trim().charAt(0)) ? new Constant(parts[1].trim()) : new Variable(parts[1].trim());
+            Term t1 = parseToTerm(parts[0]);
+            Term t2 = parseToTerm(parts[1]);
             return new TermEquality(t1, t2);
         }
+
+        // Håndter ulikhet (!=)
         if (trimmed.contains("!=")) {
             String[] parts = trimmed.split("!=");
-            Term t1 = Character.isUpperCase(parts[0].trim().charAt(0)) ? new Constant(parts[0].trim()) : new Variable(parts[0].trim());
-            Term t2 = Character.isUpperCase(parts[1].trim().charAt(0)) ? new Constant(parts[1].trim()) : new Variable(parts[1].trim());
-            
-            // VIKTIG: Pakk TermEquality inn i en NotSentence for å oppnå "IKKE LIK"
+            Term t1 = parseToTerm(parts[0]);
+            Term t2 = parseToTerm(parts[1]);
             return new NotSentence(new TermEquality(t1, t2));
         }
-        // 3. Standard predikat-parsing (din eksisterende kode)
+
+        // 3. Standard predikat-parsing
         String name = trimmed.substring(0, trimmed.indexOf('('));
         String[] args = trimmed.substring(trimmed.indexOf('(') + 1, trimmed.indexOf(')')).split(",");
-        
+
         List<Term> terms = new ArrayList<>();
         for (String arg : args) {
-            String t = arg.trim();
-            terms.add(Character.isUpperCase(t.charAt(0)) ? new Constant(t) : new Variable(t));
+            terms.add(parseToTerm(arg));
         }
+
         return new Predicate(name, terms);
     }
-    
+
+    /**
+     * parseToTerm
+     * Konverterer en streng-part direkte til en Term (Constant eller Variable).
+     * @param String rawArg String to be converted
+     * @return a Term
+     */
+    public Term parseToTerm(String rawArg) {
+        String trimmed = rawArg.trim();
+        if (isConstant(trimmed)) {
+            return new Constant(trimmed);
+        } else {
+            return new Variable(trimmed);
+        }
+    }
+
+    /**
+     * Avgjør om et ord/symbol skal tolkes som en Constant.
+     */
+    private boolean isConstant(String token) {
+        if (token == null || token.isEmpty()) {
+            return false;
+        }
+
+        // 1. Stor bokstav (f.eks. WhitePawn4, BlackKing, WhitePlayer)
+        if (Character.isUpperCase(token.charAt(0))) {
+            return true;
+        }
+
+        // 2. Sjakknotasjon (f.eks. e4, d5, a1, h8)
+        if (token.length() == 2) {
+            char file = token.charAt(0);
+            char rank = token.charAt(1);
+
+            boolean isValidFile = (file >= 'a' && file <= 'h');
+            boolean isValidRank = (rank >= '1' && rank <= '8');
+
+            if (isValidFile && isValidRank) {
+                return true;
+            }
+        }
+
+        return false; // Ellers er det en variabel (f.eks. p, s, s1, x)
+    }    
+	/*
+	 * public Sentence parseToPredicateold(String input) { String trimmed =
+	 * input.trim();
+	 * 
+	 * // 1. Håndter NOT-konnektoren if (trimmed.startsWith("NOT(") &&
+	 * trimmed.endsWith(")")) { String inner = trimmed.substring(4, trimmed.length()
+	 * - 1); return new NotSentence(parseToPredicateold(inner)); }
+	 * 
+	 * // 2. Håndter likhet/ulikhet (f.eks. s1==s2) if (trimmed.contains("==")) {
+	 * String[] parts = trimmed.split("=="); Term t1 =
+	 * Character.isUpperCase(parts[0].trim().charAt(0)) ? new
+	 * Constant(parts[0].trim()) : new Variable(parts[0].trim()); Term t2 =
+	 * Character.isUpperCase(parts[1].trim().charAt(0)) ? new
+	 * Constant(parts[1].trim()) : new Variable(parts[1].trim()); return new
+	 * TermEquality(t1, t2); } if (trimmed.contains("!=")) { String[] parts =
+	 * trimmed.split("!="); Term t1 =
+	 * Character.isUpperCase(parts[0].trim().charAt(0)) ? new
+	 * Constant(parts[0].trim()) : new Variable(parts[0].trim()); Term t2 =
+	 * Character.isUpperCase(parts[1].trim().charAt(0)) ? new
+	 * Constant(parts[1].trim()) : new Variable(parts[1].trim());
+	 * 
+	 * // VIKTIG: Pakk TermEquality inn i en NotSentence for å oppnå "IKKE LIK"
+	 * return new NotSentence(new TermEquality(t1, t2)); } // 3. Standard
+	 * predikat-parsing (din eksisterende kode) String name = trimmed.substring(0,
+	 * trimmed.indexOf('(')); String[] args = trimmed.substring(trimmed.indexOf('(')
+	 * + 1, trimmed.indexOf(')')).split(",");
+	 * 
+	 * List<Term> terms = new ArrayList<>(); for (String arg : args) { String t =
+	 * arg.trim(); terms.add(Character.isUpperCase(t.charAt(0)) ? new Constant(t) :
+	 * new Variable(t)); } return new Predicate(name, terms); }
+	 */
+
+   
     private List<Variable> extractVariables(List<Sentence> premises, Sentence conclusion) {
         Set<String> varNames = new HashSet<>();
         List<Sentence> allSentences = new ArrayList<>(premises);

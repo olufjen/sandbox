@@ -26,7 +26,7 @@ public class FunctionContect {
 	/**
 	 * register
 	 * This method register functions to be used in the context Map
-	 * @param name - The name of the function
+	 * @param name - The name of the function - The key for the HashMap
 	 * @param function - The function implementing the FunctionExecutor interface
 	 */
 	public void register(String name,FunctionExecutor function){
