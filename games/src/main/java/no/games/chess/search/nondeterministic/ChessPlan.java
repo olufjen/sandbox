@@ -33,8 +33,6 @@ public class ChessPlan {
 
 	private List<GameAction> actionSteps = new LinkedList<>();
 	private List<IfStatement> ifStatements = new LinkedList<>();
-
-
 	public ChessPlan() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -84,11 +82,30 @@ public class ChessPlan {
 			throw new IllegalArgumentException("Specified step is not conditional.");
 		for (IfStatement ifStatement : ifStatements) {
 			if (ifStatement.testCondition(state))
-				return ifStatement.getChessPlan();
+				return ifStatement.getChessPlan(); // OBS: This structure does not work
 		}
 		return null; // no matching plan found for the given state.
 	}
+	/**
+	 * Evaluates the specified conditional step and returns a plan of the first if-statement which matches
+	 * the given state.
+	 * @param step A conditional step (last step in the plan).
+	 * @param The stateid of The state to be matched.
+	 * @return A plan or null if no match was found.
+	 */
+	public ChessPlan getNextChessPlan(int step, String stateName) {
+		ChessPlan chosenPlan = null;
+		if (isActionStep(step) || step != actionSteps.size())
+			throw new IllegalArgumentException("Specified step is not conditional.");
+		for (IfStatement ifStatement : ifStatements) {
+			if (ifStatement.testStateNameCondition(stateName)) {
+				chosenPlan = ifStatement.getChessPlan();
+				break;
+			}
 
+		}
+		return chosenPlan; // no matching plan found for the given state.
+	}
 	/**
 	 * Prepend an action to the plan and return itself.
 	 * 
@@ -149,7 +166,10 @@ public class ChessPlan {
 		boolean testCondition(GameState state) {
 			return this.state.equals(state);
 		}
+		boolean testStateNameCondition(String stateName) {
+			return this.state.getGamestateId().equals(stateName);
 
+		}
 		ChessPlan getChessPlan() {
 			return plan;
 		}

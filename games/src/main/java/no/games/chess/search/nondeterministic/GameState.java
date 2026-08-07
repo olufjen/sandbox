@@ -46,6 +46,8 @@ public abstract class GameState {
 	protected String[] liftedKey = new String[5]; // A String array used as a parameter set for a lifted action of the form:  {startpos,piecename,endpos,piecetype}
 	protected String algebraicNotation; // algebraic notation for possible move
 	protected GameAction action;
+	protected GameAction plannedAction = null; // the next planned action in a plan 
+	private GameAction chosenAction = null;
 	protected List<GameAction> actions;
 	protected ChessPercept thePerceptor;
 	protected List<ActionSchema> actionSchemas;
@@ -135,8 +137,21 @@ public abstract class GameState {
 	public void setAlgebraicNotation(String algebraicNotation) {
 		this.algebraicNotation = algebraicNotation;
 	}
+	
+	public GameAction getPlannedAction() {
+		return plannedAction;
+	}
+
+	public void setPlannedAction(GameAction plannedAction) {
+		this.plannedAction = plannedAction;
+	}
+
 	public GameAction getAction() {
-		return action;
+		if(action != null)
+			chosenAction = action;
+		if (plannedAction != null)
+			chosenAction = plannedAction;
+		return chosenAction;
 	}
 	public void setAction(GameAction action) {
 		this.action = action;
@@ -182,7 +197,7 @@ public abstract class GameState {
 	public abstract boolean testEnd(GameAction action);
 	
 	public String toString() {
-		String theState = gamestateId; //To be changed
+		String theState = gamestateId + " "+actionSchema.getName()+" "; //To be changed
 		return theState;
 		
 	}
