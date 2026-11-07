@@ -42,6 +42,7 @@ public abstract class GameState {
 
 	protected List<Sentence> pieceSentences = new ArrayList<Sentence>();
 	protected ActionSchema actionSchema;
+	protected ActionSchema parentopponentAction = null;
 	protected String[] notations;// // These are keys for the moves in algebraic notation.
 	protected String[] liftedKey = new String[5]; // A String array used as a parameter set for a lifted action of the form:  {startpos,piecename,endpos,piecetype}
 	protected String algebraicNotation; // algebraic notation for possible move
@@ -53,6 +54,7 @@ public abstract class GameState {
 	protected List<ActionSchema> actionSchemas;
 	protected String gamestateId;
 	protected boolean goalState = false;
+	protected boolean threatened = false; // This flag is true if any of the player's pieces are under threat
 	
 	public GameState() {
 		super();
@@ -82,6 +84,22 @@ public abstract class GameState {
 		super();
 		this.thePerceptor = thePerceptor;
 		this.actionSchemas = actionSchemas;
+	}
+
+	public ActionSchema getParentopponentAction() {
+		return parentopponentAction;
+	}
+
+	public void setParentopponentAction(ActionSchema parentopponentAction) {
+		this.parentopponentAction = parentopponentAction;
+	}
+
+	public boolean isThreatened() {
+		return threatened;
+	}
+
+	public void setThreatened(boolean threatened) {
+		this.threatened = threatened;
 	}
 
 	public boolean isGoalState() {

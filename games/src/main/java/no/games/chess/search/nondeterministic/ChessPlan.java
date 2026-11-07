@@ -25,7 +25,7 @@ import java.util.List;
  * This opponent move produces a new set of states. All states but one remain the same.
  * The plan consists of a linked list of if statements (if game state x) and a linked list of game actions: (then game action y)
  * 
- * 
+ * @since 05.11.26 isActionStepempty was added
  */
 public class ChessPlan {
 
@@ -51,7 +51,15 @@ public class ChessPlan {
 	public boolean isEmpty() {
 		return actionSteps.isEmpty() && ifStatements.isEmpty();
 	}
-
+	/**
+	 * isActionStepempty
+	 * This method returns true if the LinkedList actionStep is empty
+	 * @return true if the action step is empty
+	 * @since 05.11.26 This method was added
+	 */
+	public boolean isActionStepempty() {
+		return actionSteps.isEmpty();
+	}
 	/** Returns the number of steps of this ChessPlan. */
 	public int size() {
 		return ifStatements.isEmpty() ? actionSteps.size() : actionSteps.size() + 1;
@@ -181,7 +189,8 @@ public class ChessPlan {
 		 */
 		@Override
 		public String toString() {
-			return "if " + state + " then " + plan;
+			return "if " + state.getParentopponentAction().toString()
+					+ " then " + plan;
 		}
 	}
 }

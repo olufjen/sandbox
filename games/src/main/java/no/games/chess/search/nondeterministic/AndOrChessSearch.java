@@ -83,7 +83,7 @@ public class AndOrChessSearch {
 		// OR-SEARCH(problem.INITIAL-STATE, problem, [])
 		ChessPlan plan = null;
 		if (state != null) {
-			plan = orSearch(problem.getInitialState(), problem, new ChessPath()); // My move The chesspath is an empty linkedlist
+			plan = orSearch(problem.getInitialState(), problem, new ChessPath()); // PLayer move The chesspath is an empty linkedlist
 			return plan != null ? Optional.of(plan) : Optional.empty();
 		}else { // If there is no initial state return a plan checking all available states.
 			return  Optional.empty();
@@ -128,8 +128,12 @@ public class AndOrChessSearch {
 			ChessPlan plan = andSearch(problem.getResults(state, action), problem, path.prepend(state)); //getResults returns the state as a result of the action. Calls the performAction method of GroundGameAction 
 			//   -- applicable  action andSearch is the opponent move
 			// if plan != failure then return [action|plan]
-			if (plan != null)
-				return plan.prepend(action);
+			if (plan != null) {
+				if (plan.isActionStepempty()) // Check if action step is empty
+					plan.prepend(action);
+				return plan;
+//				return plan.prepend(action); //The original return statement??? This always returns the last action 
+			}
 		}
 		// return failure
 		return null;
@@ -165,7 +169,7 @@ public class AndOrChessSearch {
 		expandedNodes++;
 		List<ChessPlan> subPlans = new ArrayList<>(states.size()); // What if the resultfunction returns an empty list of states?
 		// for each s_i in states do - returns a plan as a result of an action by the agent (the player).
-		for (GameState state : states) {
+		for (GameState state : states) { // The list of states are a result of all available opponent's actions
 			// plan_i <- OR-SEARCH(s_i, problem, path)
 			ChessPlan subPlan = orSearch(state, problem, path);
 	//		subPlans.add(subPlan);
@@ -175,8 +179,11 @@ public class AndOrChessSearch {
 			}
 			if (subPlan == null)
 				break; // OrSearch returns null if state is on path, then break the search OJN 9.04.26
-			if (state.isGoalState())
-				break;  // This is true if orSearch has found a goal state
+/*
+ * Denne strukturen forhindrer en plan			
+ */
+//			if (state.isGoalState()) // Denne strukturen forhindrer en plan !!
+//				break;  // This is true if orSearch has found a goal state
 		}
 		if (subPlans.size() == 1) {
 			// no if is needed in this case...
