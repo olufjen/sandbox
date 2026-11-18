@@ -126,6 +126,7 @@ public class AndOrChessSearch {
 		for (GameAction action : problem.getActions(state)) { // getActions Returns actions applicable in this state (see the getRelevantActions in the GroundGameState)
 			// plan <- AND-SEARCH(RESULTS(state, action), problem, [state|path])
 			ChessPlan plan = andSearch(problem.getResults(state, action), problem, path.prepend(state)); //getResults returns the state as a result of the action. Calls the performAction method of GroundGameAction 
+			// This call to getResult and the performAction method takes a long time!!!!!
 			//   -- applicable  action andSearch is the opponent move
 			// if plan != failure then return [action|plan]
 			if (plan != null) {
@@ -178,8 +179,11 @@ public class AndOrChessSearch {
 										// Changed: If state is not on path (subPlan is not null) Add subPlan to plans
 			}
 			if (subPlan == null)
-				break; // OrSearch returns null if state is on path, then break the search OJN 9.04.26
-/*
+				return null; // 09.11.26 etter forslag fra gemini
+			/*
+			 * if (subPlan == null) break; // OrSearch returns null if state is on path,
+			 * then break the search OJN 9.04.26
+			 *//*
  * Denne strukturen forhindrer en plan			
  */
 //			if (state.isGoalState()) // Denne strukturen forhindrer en plan !!
